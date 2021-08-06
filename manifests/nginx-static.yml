@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Deployment
 metadata:
-  name: test
+  name: gotti-dev
   namespace: gotti-dev
 spec:
   selector:
