@@ -42,6 +42,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: check
+        run: echo ${GITHUB_SHA}
+
+      - name: check2
+        run: echo $GITHUB_SHA
+
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
         with:
