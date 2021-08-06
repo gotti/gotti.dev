@@ -21,7 +21,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -35,16 +36,16 @@ jobs:
         run: cd www && docker build -t gotti.dev/nginx-static:$GITHUB_SHA .
         
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v1 
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push docker image to ghcr
+      - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
         with:
           context: ./www
+          platforms: linux/amd64
           push: true
-          tags: |
-            ghcr.io/gotti/gotti-dev:$GITHUB_SHA
+          tags: ghcr.io/gotti/nginx-static:$GITHUB_SHA
