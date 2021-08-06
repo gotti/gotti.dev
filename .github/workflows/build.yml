@@ -57,7 +57,7 @@ jobs:
 
 
       - name: replace TAG_PLACEHOLDER
-        run: sed -i -e "s/TAG_PLACEHOLDER/${{ env.GIT_SHA }}/" ./manifests/nginx-static.yml
+        run: sed -i -e "s/TAG_PLACEHOLDER/${{ env.GIT_SHA }}/" ./manifests/nginx-static.yml && cat ./manifests/nginx-static.yml
 
       - name: push to deployment
         run: |
