@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ deployment ]
-  pull_request:
-    branches: [ deployment ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,5 +34,17 @@ jobs:
       - name: Build docker image
         run: cd www && docker build -t gotti.dev/nginx-static:$GITHUB_SHA .
         
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+
       - name: Push docker image to ghcr
-        run: docker push ghcr.io/gotti/nginx-static:$GITHUB_SHA
+        uses: docker/build-push-action@v2
+        with:
+          context: ./www
+          push: true
+          tags: |
+            ghcr.io/gotti/gotti-dev:$GITHUB_SHA
