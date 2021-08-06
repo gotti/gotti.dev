@@ -62,4 +62,5 @@ jobs:
       - name: push to deployment
         run: |
           git add ./manifests/nginx-static.yml
+          git commit -m "COMMIT by Actions"
           git push origin master:deployment
