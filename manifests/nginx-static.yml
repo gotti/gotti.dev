@@ -7,8 +7,6 @@ spec:
   selector:
     matchLabels:
       app: nginx-static
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
