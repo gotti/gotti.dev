@@ -54,4 +54,4 @@ jobs:
           context: ./www
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/gotti/nginx-static:${GITHUB_SHA}
+          tags: ghcr.io/gotti/nginx-static:latest
