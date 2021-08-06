@@ -31,10 +31,10 @@ jobs:
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.87.0'
-          
+
       - name: Build static pages
         run: cd www && hugo --minify --themesDir ./themes
-        
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1 
         with:
@@ -43,9 +43,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: check
-        run: echo ${GITHUB_SHA}
-
-      - name: check2
         run: |
           echo $GITHUB_SHA
           echo "GIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
@@ -57,3 +54,12 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ghcr.io/gotti/nginx-static:${{ env.GIT_SHA }}
+
+
+      - name: replace TAG_PLACEHOLDER
+        run: sed -i -e "s/TAG_PLACEHOLDER/${{ env.GIT_SHA }}/" ./manifests/nginx-static.yml
+
+      - name: push to deployment
+        run: |
+          git add ./manifests/nginx-static.yml
+          git push origin master:deployment
