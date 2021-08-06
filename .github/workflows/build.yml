@@ -65,4 +65,4 @@ jobs:
           git config --global user.name "gotti"
           git add ./manifests/nginx-static.yml
           git commit -m "COMMIT by Actions"
-          git push origin master:deployment
+          git push origin master:deployment -f
