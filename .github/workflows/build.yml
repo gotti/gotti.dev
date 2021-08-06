@@ -46,7 +46,9 @@ jobs:
         run: echo ${GITHUB_SHA}
 
       - name: check2
-        run: echo $GITHUB_SHA
+        run: |
+          echo $GITHUB_SHA
+          echo "GIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
 
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
@@ -54,4 +56,4 @@ jobs:
           context: ./www
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/gotti/nginx-static:latest
+          tags: ghcr.io/gotti/nginx-static:${ env.GIT_SHA }
