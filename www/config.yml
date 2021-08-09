@@ -8,7 +8,7 @@ params:
   description: ごっちでぶ
   homeMetaContent: ごっちでぶ
   footer: Made with [Hugo](https://gohugo.io/). Themed by [Cupper](https://github.com/zwbetz-gh/cupper-hugo-theme). Deployed to k8s on otaku house.
-  dateFormat: 2006/2/1
+  dateFormat: 2006/1/2
   codePenUser: ごっち
   katex: true
   hideHeaderLinks: false
