@@ -3,6 +3,7 @@
 ## ぼくの
 - [GitHub](https://github.com/gotti)
 - [Twitter](https://twitter.com/intent/user?user_id=3721840992)
+- [🀄🐴🍺](https://twitter.com/intent/user?user_id=3721840992)
 
 ## ほかの
 - [りんりん](https://lnln.dev)
