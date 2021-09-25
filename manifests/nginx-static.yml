@@ -4,6 +4,7 @@ metadata:
   name: gotti-dev
   namespace: gotti-dev
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: nginx-static
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx-static
-        image: ghcr.io/gotti/nginx-static:TAG_PLACEHOLDER
+        image: ghcr.io/gotti/nginx-static:f051d14
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80
