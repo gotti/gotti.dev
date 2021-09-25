@@ -1,0 +1,12 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gotti-dev
+  namespace: gotti-dev
+spec:
+  routes:
+    - match: Host(`gotti.dev`)
+      kind: Rule
+      services:
+        - name: nginx-static
+          port: 80
