@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx-static
-        image: ghcr.io/gotti/nginx-static:f051d14
+        image: ghcr.io/gotti/nginx-static:TAG_PLACEHOLDER
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80
