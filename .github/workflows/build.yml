@@ -66,3 +66,29 @@ jobs:
           git add ./manifests/nginx-static.yml
           git commit -m "COMMIT by Actions"
           git push origin master:deployment -f
+
+  compress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+      - name: install imagemagick
+        run: |
+          curl -OL https://download.imagemagick.org/ImageMagick/download/binaries/magick
+          sudo mv magick /usr/bin/magick
+          sudo chmod 755 /usr/bin/magick
+      - name: compress
+        run: |
+          bash ./compress.sh
+      - name: push
+          echo "GIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+          git config --global user.email "18141824+gotti@users.noreply.github.com"
+          git config --global user.name "gotti"
+          git checkout -b $GIT_SHA
+          git add ./www/content/post
+          git commit -m "COMMIT by Actions"
+          git push origin $GIT_SHA
+          hub pull-request create -b master
