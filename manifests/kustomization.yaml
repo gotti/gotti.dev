@@ -1,5 +1,6 @@
 resources:
   - ./namespace.yml
   - ./service.yml
-  - ./ingressroute.yml
+#  - ./ingressroute.yml
   - ./nginx-static.yml
+  - ./virtualservice-nginx.yml
