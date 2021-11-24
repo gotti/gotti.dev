@@ -33,7 +33,7 @@ Kcmastrpc, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wi
 
 # GKE
 
-サークルのお金でGKEの代金が落ちるらしいので借りちゃいました。わたしの家にはg8s(gotti house k8s)があるので最初はこっちでやっていたのですが、ノードがしょぼいのでgrafanaを開いてprometheusを叩くと負荷で落ちます。悲しいね。
+サークルのお金でGKEの代金が落ちるらしいので借りちゃいました。わたしの家にはg8s(gotti house k8s)があるので最初はこっちでやっていたのですが、ノードがしょぼいのでgrafanaを開いてprometheusを叩くと負荷で落ちます。悲しいね。ちなみにこのサイトはg8sに乗っています。
 
 traefikとoauth2-proxyを認証に使っていてgrafanaのダッシュボードや配信者ページなどにはGitHubのOrganization認証が掛けてあります。forwardAuthするだけで認証を掛けられたtraefikが便利でした。
 
