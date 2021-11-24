@@ -79,3 +79,7 @@ Prometheusで監視をやっています。各サーバはgo言語で書いて�
 プロジェクト自体への反省点はいくつもあります。たとえばコードを書き始めたのは調布祭の1ヶ月前ですし、具体的な目標を定めずに風呂敷を広げすぎたり。いくつかの要素は調布祭の前日になって破壊し、速度制御に至っては3日目に破壊しました。。。
 
 マイクロサービス的な構成になってしまい、サーバ開発者(わたし)がテストを書いたり動作確認するのをサボってmainへマージしてたのも反省点ですかね。ちゃんとモックなど作ってテストをやりましょう。
+
+追記: 弊学の情報基盤センターの方へ、これなんとかして
+
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ぼく「なんかリンクアップしないんですけど」<br>情基「ケーブル切れてたわ^^」<br>ぼく「なんかIPv4パケット全部闇に飲まれるんだけど」<br>情基「IPアドレス衝突してたわ^^」</p>&mdash; 反省ロボ (@_nil_a_) <a href="https://twitter.com/_nil_a_/status/1463339569605414913?ref_src=twsrc%5Etfw">November 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
