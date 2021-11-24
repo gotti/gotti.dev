@@ -8,6 +8,11 @@ tags: ["chofufes", "infra", "k8s"]
 
 また今年もプラレールです。去年もやりましたね。去年の記事は[ここを見てください。](https://gotti.dev/post/kokenadvent2020/)
 
+こんな感じでスマホの操作でプラレールのストップレールや分岐レールを操作することができます。
+操作のレスポンスはほとんど即時(測ってない)、WebRTCの配信は4G回線で受けても100ms程度の遅延でした。
+
+<blockquote class="twitter-tweet"><p lang="und" dir="ltr"><a href="https://t.co/ajLFQVR348">pic.twitter.com/ajLFQVR348</a></p>&mdash; ごっち (@0xg0tti) <a href="https://twitter.com/0xg0tti/status/1462603819247091713?ref_src=twsrc%5Etfw">November 22, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
 わたしの担当はインフラとバックエンドでした。バックエンドの話はたぶんadvent calendarでやるのでここではインフラの話をやります。
 
 去年は暖かみのある手動デプロイでサーバを更新していました。サーバ上でvimを開いて開発していたときもありました、懐かしいですね。でももうやめましょう。自動化するべきです。
