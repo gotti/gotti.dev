@@ -23,9 +23,11 @@ https://chofufes2021.gotti.dev
 
 ということで今回インフラ班になったからにはCI/CD(Continuous Integration/Continuous Delivery)をゴリゴリ使っていくことにしました。まあインフラ班は明確に割り振られたわけではなくわたしが勝手にやってただけなのですが。
 
-また今回は迅速な障害対応のためにPrometheusによるアプリケーションのメトリクス収集とgrafanaによる可視化を行なっています。これは建前で、本音はグラフを見てにやにやしたかったからです。
+また今回は迅速な障害対応のためにPrometheusによるアプリケーションのメトリクス収集とgrafanaによる可視化を行なっています。この理由は建前で、本音はグラフを見てにやにやしたかったからです。
 
-では今年のインフラ構成をご紹介します。
+では今年のインフラ構成をご紹介します。 あとGitHubのURLはコレです。
+
+https://github.com/ueckoken/plarail2021-soft
 
 # 概要
 
@@ -33,13 +35,13 @@ https://chofufes2021.gotti.dev
 
 Kcmastrpc, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
 
-図です。ほとんどのサーバはGKE上に展開されていますが、一部のサーバは学内にあります。学内のサーバはESP32などのマイコンを叩くため仕方なく置いてある感じです。
+図です。ほとんどのサーバはGKE上に展開されていますが、一部のサーバは学内にあります。学内のサーバはESP32などのマイコンを叩くため仕方なく置いてある感じです。いくつかは面倒なので図に描かれていません。
 
 # GKE
 
 サークルのお金でGKEの代金が落ちるらしいので借りちゃいました。わたしの家にはg8s(gotti house k8s)があるので最初はこっちでやっていたのですが、ノードがしょぼいのでgrafanaを開いてprometheusを叩くと負荷で落ちます。悲しいね。ちなみにこのサイトはg8sに乗っています。
 
-traefikとoauth2-proxyを認証に使っていてgrafanaのダッシュボードや配信者ページなどにはGitHubのOrganization認証が掛けてあります。forwardAuthするだけで認証を掛けられたtraefikが便利でした。
+oauth2-proxyを一部ページの認証に使っていてgrafanaのダッシュボードやWebRTC配信者用ページなどにはGitHubのOrganizationで認証が掛けてあります。forwardAuthするだけで認証を掛けられたtraefikが便利でした。
 
 CDには[FluxCD](https://fluxcd.io/)を使っています。ArgoCDと違ってGUIは無いのですが、別にArgoCDでもGUIは使わないので問題ありません。(※ArgoCD自身の設定をArgoCDで同期させるとGUIいらなくねになっちゃう。)
 
@@ -49,7 +51,7 @@ FluxCDのImageAutomationを使って新しいDockerイメージがghcr.io(GitHub
 
 学内サーバにもtraefikを使っていますがこちらはKubernetesではなくdocker-composeです。単ノードKubernetesを用意するのが面倒だったからですが、docker-composeでCDするのも面倒だったのでおとなしくこっちもKubernetesにするべきでした。Github ActionsでSSHを叩いてCDしています。。。
 
-たぶんバックエンドの記事で詳しく書くんですが、GKEと学内サーバのサーバ間通信はgRPCを使っています。これにはちゃんとクライアント認証の機能まで付いているのですが面倒なので今回はVPNを使っています。図でTailScaleの部分ですね。
+たぶんバックエンドの記事で詳しく書くんですが、GKEと学内サーバのサーバ間通信はgRPCを使っています。これにはちゃんとクライアント認証の機能まで付いているのですが面倒なので今回はVPNを使っています。図でTailscaleの部分ですね。
 
 内部向けはVPN経由だけでアクセスできるようにして外部向けのポートだけをtraefikで公開していた感じでした。
 
@@ -59,7 +61,7 @@ Tailscaleはオタクが推してたので使ってみました。Kubernetesの�
 
 自動化、やりたいですよね。今年の調布祭プラレールではデプロイ作業をほとんど自動化しています。GitHubの画面でポチポチするだけでサーバが更新されます。GKE側のデプロイの順序はFluxCDを使ったいつものやつです。
 
-1. GitHubでmainからdeploymentにmerge
+1. GitHubでmainブランチからdeploymentブランチにmerge
 2. deploymentブランチのon_pushでGitHub Actionsを実行しdockerイメージをビルド、ghcrにプッシュ
 3. ghcr上のイメージの更新を検知したFluxCDがmainブランチのマニフェストを更新
 4. FluxCDがmainブランチの変更を検知してサーバを更新
@@ -70,26 +72,30 @@ Tailscaleはオタクが推してたので使ってみました。Kubernetesの�
 
 # 監視
 
-Prometheusで監視をやっています。各サーバはgo言語で書いているのでprometheus exporterをシュッっと取り付けられます。
+Prometheusで監視をやっています。各サーバはgo言語で書いているのでPrometheus exporterをシュッっと取り付けられます、よい。gRPCのレスポンスコード？などのメトリクスもInterceptorを挟むだけで動いたとバックエンド班のもう1人のオタクが言っていました。
 
 同時接続数(websocketの接続数)や総操作回数、サーバ間のgRPCの通信、マイコンの死活監視などのメトリクスを取得しています。ダッシュボードはこんな感じ。
 
 ![grafana dashboard](./grafana-dashboard.png)
 
-1080pで表示したものを720pで取ってしまったので文字が荒れちゃってますがこんな感じでした。
+1080pで表示したものを720pで取ってしまったので文字が荒れちゃってますね。
 
 # 反省と改善
 
-3日目(最終日)に謎のネットワークトラブルが発生しました。謎の操作の遅延が起きていたらしいです。この原因がよくわからなかったことが反省点ですね。今度はzabbixも使ってルータあたりも監視したいですね。
+3日目(最終日)に謎のネットワークトラブルが発生しました。謎の操作の遅延が起きていたらしいです。この原因がよくわからなかったことが反省点ですね。今度はzabbixも使ってルータあたりも監視したいです。
 
 エラーログを収集する方法がkubectlやsternを叩くしかなかったのも改善したいです。GKEならちゃんとcloud loggingを使えるようにしたりとかですかね。datadogもいいかもしれません。
+
+IaaCしていないのは許してください。GKE立ててCloud DNSちょっと弄っただけなのでTerraform書くのが面倒でした。
+
+あとはSecretの管理が雑でした。ちゃんと管理するならGitHubとかに暗号化したものを上げるべきなのでしょう。面倒だったのでわたしの手元にしかないです。ただ今回リポジトリがPublicなので許してください。
 
 # まとめ
 
 プロジェクト自体への反省点はいくつもあります。たとえばコードを書き始めたのは調布祭の1ヶ月前ですし、具体的な目標を定めずに風呂敷を広げすぎたり。いくつかの要素は調布祭の前日になって破壊し、速度制御に至っては3日目に破壊しました。。。
 
-マイクロサービス的な構成になってしまい、サーバ開発者(わたし)がテストを書いたり動作確認するのをサボってmainへマージしてたのも反省点ですかね。ちゃんとモックなど作ってテストをやりましょう。
+でもインフラに限って言えばまあまあ頑張ったのではないでしょうか。褒めてもらいたい。。。
 
-追記: 弊学の情報基盤センターの方へ、これなんとかして
+追記: 弊学の情報基盤センターの方へ、疎通確認してから情報コンセントを貸してくださるとインフラ班が楽できます。お願いします。
 
 <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ぼく「なんかリンクアップしないんですけど」<br>情基「ケーブル切れてたわ^^」<br>ぼく「なんかIPv4パケット全部闇に飲まれるんだけど」<br>情基「IPアドレス衝突してたわ^^」</p>&mdash; 反省ロボ (@_nil_a_) <a href="https://twitter.com/_nil_a_/status/1463339569605414913?ref_src=twsrc%5Etfw">November 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
