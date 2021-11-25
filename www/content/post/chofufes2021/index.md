@@ -43,18 +43,24 @@ traefikとoauth2-proxyを認証に使っていてgrafanaのダッシュボード
 
 CDには[FluxCD](https://fluxcd.io/)を使っています。ArgoCDと違ってGUIは無いのですが、別にArgoCDでもGUIは使わないので問題ありません。(※ArgoCD自身の設定をArgoCDで同期させるとGUIいらなくねになっちゃう。)
 
-FluxCDのImageAutomationを使って新しいDockerイメージがghcr.ioに追加されたらGitHubのmainブランチにあるdeploymentなどのマニフェストを更新するようにしています。詳しくはCI/CDの項目で。
+FluxCDのImageAutomationを使って新しいDockerイメージがghcr.io(GitHub Container Registry)に追加されたらGitHubのmainブランチにあるdeploymentなどのマニフェストを更新するようにしています。詳しくはCI/CDの項目で。
 
 # 学内サーバ
 
 学内サーバにもtraefikを使っていますがこちらはKubernetesではなくdocker-composeです。単ノードKubernetesを用意するのが面倒だったからですが、docker-composeでCDするのも面倒だったのでおとなしくこっちもKubernetesにするべきでした。Github ActionsでSSHを叩いてCDしています。。。
+
+たぶんバックエンドの記事で詳しく書くんですが、GKEと学内サーバのサーバ間通信はgRPCを使っています。これにはちゃんとクライアント認証の機能まで付いているのですが面倒なので今回はVPNを使っています。図でTailScaleの部分ですね。
+
+内部向けはVPN経由だけでアクセスできるようにして外部向けのポートだけをtraefikで公開していた感じでした。
+
+Tailscaleはオタクが推してたので使ってみました。Kubernetesのサイドカーとして突っ込めて一瞬でVPNを張れたのでかなり良かったです。
 
 # CI/CD
 
 自動化、やりたいですよね。今年の調布祭プラレールではデプロイ作業をほとんど自動化しています。GitHubの画面でポチポチするだけでサーバが更新されます。GKE側のデプロイの順序はFluxCDを使ったいつものやつです。
 
 1. GitHubでmainからdeploymentにmerge
-2. deploymentブランチのon_pushでdockerイメージをビルド、ghcrにプッシュ
+2. deploymentブランチのon_pushでGitHub Actionsを実行しdockerイメージをビルド、ghcrにプッシュ
 3. ghcr上のイメージの更新を検知したFluxCDがmainブランチのマニフェストを更新
 4. FluxCDがmainブランチの変更を検知してサーバを更新
 
