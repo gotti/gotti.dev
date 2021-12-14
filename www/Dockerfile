@@ -2,6 +2,7 @@ FROM node as builder
 
 WORKDIR /frontend
 
+COPY ./contents /frontend
 COPY ./frontend /frontend
 
 RUN npm install
