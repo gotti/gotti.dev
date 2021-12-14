@@ -27,14 +27,14 @@ const Post: FC<Props> = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch("https://raw.githubusercontent.com/gotti/blog/main/contents/blog.yaml").then(res => res.blob()).then(blob => blob.text())
+  const res = await fetch("https://raw.githubusercontent.com/gotti/gotti.dev/main/www/contents/blog.yaml").then(res => res.blob()).then(blob => blob.text())
   const y = yaml.load(res)["posts"]
   const paths = y.map(post => {
       return post.slice(1)
     }
    )
   const posts_b = await paths.map(async p => {
-    const res = await fetch("https://raw.githubusercontent.com/gotti/blog/main/contents"+p+"/index.md").then(res => res.blob()).then(blob => blob.text())
+    const res = await fetch("https://raw.githubusercontent.com/gotti/gotti.dev/main/www/contents"+p+"/index.md").then(res => res.blob()).then(blob => blob.text())
     const y = matter(res)
     const ret = {
         title: y.data["title"],
