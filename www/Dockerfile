@@ -11,5 +11,5 @@ RUN ls
 FROM nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /frontend/ /srv/http/
 COPY --from=builder /frontend/out/ /srv/http/
-COPY ./contents/ /srv/http/
