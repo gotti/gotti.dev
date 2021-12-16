@@ -1,7 +1,7 @@
 $phone: 760px;
 
 $breakpoints: (
-  'xs': (min-width: 0),
+  'xs': (max-width: 992px),
   'lg': (min-width: 992px),
 ) !default;
 
@@ -21,7 +21,7 @@ Body {
       "Menu Home";
   }
   @include mq(xs){
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
     grid-template-areas: "Menu"
                          "Home";
   }
@@ -29,4 +29,9 @@ Body {
 
 img {
     max-width: 100%;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
 }
