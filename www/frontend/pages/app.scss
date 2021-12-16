@@ -1,8 +1,30 @@
+$phone: 760px;
+
+$breakpoints: (
+  'xs': (min-width: 0),
+  'lg': (min-width: 992px),
+) !default;
+
+@mixin mq($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and #{inspect(map-get($breakpoints, $breakpoint))} {
+      @content;
+    }
+  }
+}
+
 Body {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  grid-template-areas:
-    "Menu Home"
+  @include mq(lg){
+    grid-template-columns: 300px 1fr;
+    grid-template-areas:
+      "Menu Home";
+  }
+  @include mq(xs){
+    grid-template-columns: 1fr;
+    grid-template-areas: "Menu"
+                         "Home";
+  }
 }
 
 img {
