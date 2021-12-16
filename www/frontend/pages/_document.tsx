@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { Menu } from "../components/Menu"
+import { Menu } from "../components/Menu";
 
 class MyDocument extends Document {
     render(): JSX.Element {

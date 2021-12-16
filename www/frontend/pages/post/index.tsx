@@ -3,6 +3,7 @@ import * as yaml from "js-yaml"
 import Link from 'next/link'
 import matter from "gray-matter"
 import { GetStaticProps } from "next";
+import { PageHead } from "../../components/PageHead"
 
 interface Post {
   title: string;
@@ -16,6 +17,7 @@ interface Props {
 const Post: FC<Props> = ({ posts }) => {
     return (
         <>
+          <PageHead title="Post"/>
           <h2>Post</h2>
           <ul>
           {posts.map(post => (
