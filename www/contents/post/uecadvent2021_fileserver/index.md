@@ -1,12 +1,12 @@
 ---
 title: "猫でもわかるファイルサーバ構築"
-date: "2021-12-13"
+date: "2021-12-17"
 tags: ["infra", "k8s", "linux"]
 ---
 
 # はじめに
 
-こんにちは、uec20のごっちです。急に記事が書きたくなったので16日の夕方に17日の枠を確保して今この記事を書いています。
+こんにちはuec20のごっちです。猫です。急に記事が書きたくなったので16日の夕方に17日の枠を確保して今この記事を書いています。
 
 これは[UEC 2 Advent Calendar](https://adventar.org/calendars/6598)の17日目の記事です。前の記事は[つまみさんのDisnake + GitHub Actions で作るオタク鯖晒しサイト](https://trpfrog.net/notes/otaku-channels/)です。オタクもうチャンネル作るな。
 
