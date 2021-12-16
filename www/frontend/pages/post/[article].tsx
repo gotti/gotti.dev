@@ -40,12 +40,12 @@ const Article: NextPage<Props> = ({title, page, url}) => {
   return (
     <>
     <PageHead title={title}/>
-    <TwitterShareButton title={title} url={url}>
-      <TwitterIcon/>
-    </TwitterShareButton>
     <div className="postBody">
       <div dangerouslySetInnerHTML={{__html: marked(page)}}></div>
     </div>
+    <TwitterShareButton title={title} url={url}>
+      <TwitterIcon size={32} round={true}/>
+    </TwitterShareButton>
     </>
   )
 }
