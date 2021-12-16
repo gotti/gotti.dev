@@ -1,7 +1,7 @@
 ---
 title: "VyOSでソフトウェアルータ"
 date: "2021-12-13"
-tags: ["chofufes", "infra", "k8s"]
+tags: ["infra", "linux"]
 ---
 
 ## はじめに
