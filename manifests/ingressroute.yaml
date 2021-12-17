@@ -2,7 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: gotti-dev
-  namespace: plarail2021
+  namespace: gotti-dev
 spec:
   routes:
   - kind: Rule
