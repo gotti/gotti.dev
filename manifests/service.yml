@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-static
+  name: gotti-dev
   namespace: gotti-dev
 spec:
   type: NodePort
@@ -10,4 +10,4 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: nginx-static
+    app: gotti-dev

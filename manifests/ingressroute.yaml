@@ -1,0 +1,12 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gotti-dev
+  namespace: plarail2021
+spec:
+  routes:
+  - kind: Rule
+    match: Host(`gotti.dev`)
+    services:
+    - name: gotti-dev
+      port: 80
