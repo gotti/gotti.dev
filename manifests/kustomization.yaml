@@ -3,3 +3,4 @@ resources:
   - ./deployment.yaml
   - ./service.yml
   - ./ingressroute.yaml
+  - ./flux.yaml
