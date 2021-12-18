@@ -1,4 +1,5 @@
 posts:
+  - "./post/uecadvent2021_knative"
   - "./post/uecadvent2021_fileserver"
   - "./post/uecadvent2021_vyos"
   - "./post/chofufes2021"
