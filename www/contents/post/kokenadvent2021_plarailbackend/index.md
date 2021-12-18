@@ -6,7 +6,9 @@ tags: ["advent", "koken", "golang"]
 
 # はじめに
 
-はじめまして。uec20のごっちです。工研では何もやらない人をやっています。これはUEC koken advent calendarの19日目の記事です。
+はじめまして。uec20のごっちです。工研では何もやらない人をやっています。これは[UEC koken advent calendar](https://adventar.org/calendars/6604)の19日目の記事です。
+
+前の方は[もっちゃんの21年度部長になってやったこと Part.1](https://sakuramochi708.github.io/Ran-syama/koken/boss-task-1/index.html)です。
 
 今年はUEC1&2のアドカレに3つも記事を書いてしまったのですが、部長に脅されて記事を書けと言われたので書いています。4つめです。
 
