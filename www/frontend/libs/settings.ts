@@ -12,7 +12,7 @@ export const githubSetting = {
   repository: "gotti.dev",
   branch: "main",
   directory: "www",
-  siteUrl: "https://gotti.dev/posts"
+  siteUrl: "https://gotti.dev/post"
 };
 
 export const buildSiteURL = (post: string) :string => {

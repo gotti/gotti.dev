@@ -1,19 +1,17 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import {GetStaticPaths, GetStaticProps} from 'next'
 import * as yaml from "js-yaml"
 import matter from "gray-matter"
-import { marked } from "marked"
-import { PageHead } from "../../components/PageHead"
-import { TwitterShareButton, TwitterIcon } from 'react-share';
+import {marked} from "marked"
+import {PageHead} from "../../components/PageHead"
+import {TwitterShareButton, TwitterIcon} from 'react-share';
+import {postData, fetchPost, fetchPathList} from "../../libs/posts"
+import {buildPostURL} from '../../libs/settings'
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch("https://raw.githubusercontent.com/gotti/gotti.dev/main/www/contents/blog.yaml").then(res => res.blob()).then(blob => blob.text())
-  console.log(res)
-  const y = yaml.load(res)["posts"]
-  const paths = y.map(post => {
-      console.log(post)
-      return post.slice(1)
-    }
-   )
+  const posts = await fetchPathList();
+  const paths = posts.map((p) => {return `/post/${p}`;})
+  console.log("posts");
+  console.log(paths);
   return {
     paths,
     fallback: false
@@ -21,31 +19,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 interface Props {
-  title: string;
-  page: string;
-  url: string;
+  post: postData;
 }
 
-export const getStaticProps = async ({ params }) => {
-  console.log("params",params)
-  const a = await fetch("https://raw.githubusercontent.com/gotti/gotti.dev/main/www/contents/post/"+params.article+"/index.md").then(res => res.blob()).then(blob => blob.text())
-  const b = matter(a)
-  const url = "https://gotti.dev/post/"+params.article;
+export const getStaticProps = async ({params}) => {
+  console.log("params", params.article);
+  const post = await fetchPost(params.article);
+  console.log(post);
   return {
-    props: { title: b.data["title"], page: b.content, url: url}
+    props: {post}
   }
 }
 
-const Article: NextPage<Props> = ({title, page, url}) => {
+const Article: NextPage<Props> = ({post}) => {
   return (
     <>
-    <PageHead title={title}/>
-    <div className="postBody">
-      <div dangerouslySetInnerHTML={{__html: marked(page)}}></div>
-    </div>
-    <TwitterShareButton title={title} url={url}>
-      <TwitterIcon size={32} round={true}/>
-    </TwitterShareButton>
+      <PageHead title={post.title} />
+      <div className="postBody">
+        <div dangerouslySetInnerHTML={{__html: marked(post.text)}}></div>
+      </div>
+      <TwitterShareButton title={post.title} url={post.url}>
+        <TwitterIcon size={32} round={true} />
+      </TwitterShareButton>
     </>
   )
 }
