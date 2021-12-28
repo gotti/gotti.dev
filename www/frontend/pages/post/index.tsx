@@ -14,7 +14,7 @@ const Post: FC<Props> = ({posts}) => {
       <h2>Post</h2>
       <ul>
         {posts.map(post => (
-          <li><Link key={post.title} href={post.path}>{post.title}</Link></li>
+          <li key={post.path}><Link key={post.path} href={post.path}>{post.title}</Link></li>
         ))}
       </ul>
     </>

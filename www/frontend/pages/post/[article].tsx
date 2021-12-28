@@ -1,11 +1,11 @@
-import {GetStaticPaths, GetStaticProps} from 'next'
-import * as yaml from "js-yaml"
-import matter from "gray-matter"
-import {marked} from "marked"
-import {PageHead} from "../../components/PageHead"
+import {GetStaticPaths, GetStaticProps} from 'next';
+import {useEffect, useState} from 'react';
+import {marked} from "marked";
+import {PageHead} from "../../components/PageHead";
 import {TwitterShareButton, TwitterIcon} from 'react-share';
-import {postData, fetchPost, fetchPathList} from "../../libs/posts"
-import {buildPostURL} from '../../libs/settings'
+import {postData, fetchPost, fetchPathList} from "../../libs/posts";
+import hljs from "highlight.js";
+import 'highlight.js/styles/github.css';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await fetchPathList();
@@ -32,6 +32,16 @@ export const getStaticProps = async ({params}) => {
 }
 
 const Article: NextPage<Props> = ({post}) => {
+
+  useEffect(() => {
+    marked.setOptions({
+      langPrefix: "",
+      highlight: (code: string, lang: string) => {
+        return hljs.highlightAuto(code, [lang]).value
+      }
+    })
+  }, []);
+
   return (
     <>
       <PageHead title={post.title} />
