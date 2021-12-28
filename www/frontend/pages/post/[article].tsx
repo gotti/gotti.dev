@@ -18,6 +18,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
+const renderMD = (text: string): string => {
+  marked.setOptions({
+    langPrefix: "",
+    highlight: (code: string, lang: string) => {
+      return hljs.highlightAuto(code, [lang]).value
+    }
+  });
+  return marked(text);
+};
+
 interface Props {
   post: postData;
 }
@@ -32,21 +42,11 @@ export const getStaticProps = async ({params}) => {
 }
 
 const Article: NextPage<Props> = ({post}) => {
-
-  useEffect(() => {
-    marked.setOptions({
-      langPrefix: "",
-      highlight: (code: string, lang: string) => {
-        return hljs.highlightAuto(code, [lang]).value
-      }
-    })
-  }, []);
-
   return (
     <>
       <PageHead title={post.title} />
       <div className="postBody">
-        <div dangerouslySetInnerHTML={{__html: marked(post.text)}}></div>
+        <div dangerouslySetInnerHTML={{__html: renderMD(post.text)}}></div>
       </div>
       <TwitterShareButton title={post.title} url={post.url}>
         <TwitterIcon size={32} round={true} />
