@@ -13,9 +13,24 @@ $breakpoints: (
   }
 }
 
-Body {
+body {
+  margin: 0;
+}
+
+a {
+  color: #4f7d79;
+}
+
+a:visited {
+  color: #343249;
+}
+
+main {
   display: grid;
+  font-family: "Yomogi";
+  font-weight: bold;
   @include mq(lg){
+    height: 100vh;
     grid-template-columns: 300px 1fr;
     grid-template-areas:
       "Menu Home";
@@ -27,10 +42,26 @@ Body {
   }
 }
 
+.Menu {
+  background-color: #c89da1;
+}
+
+.Home {
+  padding: 12px;
+  background-color: #d6d0d0;
+}
+
 img {
     max-width: 100%;
 }
 
 pre {
-    overflow:auto;
+  padding: 10px;
+  background: #323249;
+  color: #d6d0d0;
+  overflow: auto;
+  font-family: 'Source Code Pro', monospace;
+}
+
+code {
 }

@@ -25,12 +25,8 @@ export const fetchPathList = async (): Promise<string[]> => {
   return postNames;
 };
 
-export const fetchPost = async (post: string): Promise<postData> => {
-  console.log(post);
-  console.log(buildPostURL(post));
-  const p = await fetch(buildPostURL(post));
-  const rawpost = await p.text();
-  const mpost = matter(rawpost);
+const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>): postData => {
+  //ほんとに引数の型あってる？
   const ret: postData = {
     title: mpost.data["title"],
     date: mpost.data["date"],
@@ -43,21 +39,23 @@ export const fetchPost = async (post: string): Promise<postData> => {
   return ret;
 }
 
+export const fetchPost = async (post: string): Promise<postData> => {
+  console.log(post);
+  console.log(buildPostURL(post));
+  const p = await fetch(buildPostURL(post));
+  const rawpost = await p.text();
+  const mpost = matter(rawpost);
+  const ret = mattertoPostData(post, mpost);
+  return ret;
+}
+
 export const fetchPosts = async (): Promise<postData[]> => {
   const postlist = await fetchPathList()
   const posts = postlist.map(async (post: string) => {
     const p = await fetch(buildPostURL(post));
     const rawpost = await p.text();
     const mpost = matter(rawpost);
-    const ret: postData = {
-      title: mpost.data["title"],
-      date: mpost.data["date"],
-      tags: mpost.data["tags"],
-      text: mpost.content,
-      url: buildSiteURL(post),
-      name: post,
-      path: `./post/${post}`,
-    };
+    const ret = mattertoPostData(post, mpost);
     return ret;
   })
   const ret = Promise.all(posts)

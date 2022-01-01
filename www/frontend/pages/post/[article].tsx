@@ -5,7 +5,7 @@ import {PageHead} from "../../components/PageHead";
 import {TwitterShareButton, TwitterIcon} from 'react-share';
 import {postData, fetchPost, fetchPathList} from "../../libs/posts";
 import hljs from "highlight.js";
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/github-dark-dimmed.css';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await fetchPathList();
