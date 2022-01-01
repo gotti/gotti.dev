@@ -5,6 +5,7 @@ import {PageHead} from "../../components/PageHead";
 import {TwitterShareButton, TwitterIcon} from 'react-share';
 import {postData, fetchPost, fetchPathList} from "../../libs/posts";
 import hljs from "highlight.js";
+import cheerio from 'cheerio';
 import 'highlight.js/styles/github-dark-dimmed.css';
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -25,7 +26,13 @@ const renderMD = (text: string): string => {
       return hljs.highlightAuto(code, [lang]).value
     }
   });
-  return marked(text);
+  const html : string = marked(text);
+  const headings = cheerio.load(html);
+  headings('h1, h2, h3').replaceWith((_i, elm): any => {
+    const tagId = headings(elm).attr("id");
+    headings(elm).wrap(`<a href="#${tagId}"></a>`);
+  });
+  return headings.html();
 };
 
 interface Props {
