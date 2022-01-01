@@ -37,6 +37,8 @@ main {
   }
   @include mq(xs){
     grid-template-columns: 100%;
+    height: 100vh;
+    grid-template-rows: auto 1fr;
     grid-template-areas: "Menu"
                          "Home";
   }
@@ -47,6 +49,7 @@ main {
 }
 
 .Home {
+  height: 1fr;
   padding: 12px;
   background-color: #d6d0d0;
 }
