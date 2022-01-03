@@ -19,6 +19,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
+const setInpageLink = (html: string): string => {
+  const headings = cheerio.load(html);
+  headings('h1, h2, h3').replaceWith((_i, elm): any => {
+    const tagId = headings(elm).attr("id");
+    headings(elm).wrap(`<a href="#${tagId}"></a>`);
+  });
+  return headings.html();
+}
+
 const renderMD = (text: string): string => {
   marked.setOptions({
     langPrefix: "",
@@ -27,12 +36,7 @@ const renderMD = (text: string): string => {
     }
   });
   const html : string = marked(text);
-  const headings = cheerio.load(html);
-  headings('h1, h2, h3').replaceWith((_i, elm): any => {
-    const tagId = headings(elm).attr("id");
-    headings(elm).wrap(`<a href="#${tagId}"></a>`);
-  });
-  return headings.html();
+  return setInpageLink(html);
 };
 
 interface Props {
@@ -52,6 +56,13 @@ const Article: NextPage<Props> = ({post}) => {
   return (
     <>
       <PageHead title={post.title} />
+      <div className="postDescription">
+      <h1>{post.title}</h1>
+      posted on {post.date}
+      <ul>{post.tags.map((t,i)=>
+        <li key={i}>{t}</li>)
+      }</ul>
+      </div>
       <div className="postBody">
         <div dangerouslySetInnerHTML={{__html: renderMD(post.text)}}></div>
       </div>

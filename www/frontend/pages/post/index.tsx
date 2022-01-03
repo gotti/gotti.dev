@@ -2,6 +2,7 @@ import {FC} from "react";
 import Link from 'next/link'
 import {PageHead} from "../../components/PageHead"
 import {postData, fetchPosts} from "../../libs/posts"
+import {BlogSummary} from "../../components/BlogSummary"
 
 interface Props {
   posts: postData[];
@@ -12,11 +13,7 @@ const Post: FC<Props> = ({posts}) => {
     <>
       <PageHead title="Post" />
       <h2>Post</h2>
-      <ul>
-        {posts.map(post => (
-          <li key={post.path}><Link key={post.path} href={post.path}>{post.title}</Link></li>
-        ))}
-      </ul>
+      <BlogSummary posts={posts} />
     </>
   );
 };

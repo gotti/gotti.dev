@@ -26,6 +26,7 @@ export const fetchPathList = async (): Promise<string[]> => {
 };
 
 const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>): postData => {
+  console.log(mpost.data["tags"]);
   //ほんとに引数の型あってる？
   const ret: postData = {
     title: mpost.data["title"],
@@ -59,5 +60,32 @@ export const fetchPosts = async (): Promise<postData[]> => {
     return ret;
   })
   const ret = Promise.all(posts)
+  return ret;
+}
+
+export interface Tag {
+  name: string;
+  posts: postData[];
+}
+
+interface Tags {
+  tags: Tag[];
+}
+
+export const getTags = (posts: postData[]): Tags => {
+  let tags = new Map<string, postData[]>();
+  for (const p of posts) {
+    for (const t of p.tags) {
+      if (tags[t] == undefined) {
+        tags[t] = [];
+      }
+      tags[t].push(p)
+    }
+  }
+  let ret: Tags = {tags: []};
+  for (const t of Object.keys(tags)) {
+    const tmp: Tag = {name: t, posts: tags[t]}
+    ret.tags.push(tmp)
+  }
   return ret;
 }
