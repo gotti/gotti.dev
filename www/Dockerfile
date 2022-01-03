@@ -7,7 +7,8 @@ COPY ./frontend /frontend
 
 RUN npm install
 RUN npm run build
-RUN ls
+
+RUN rm -rf /frontend/node_modules
 
 FROM nginx
 
