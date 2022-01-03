@@ -1,0 +1,33 @@
+.title {
+  font-size: 20px;
+}
+
+.summary {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+  list-style: none;
+  background-color: #c1bae0;
+  border-radius: 10px;
+}
+
+.posts {
+  padding-left: 10px;
+}
+
+.tags {
+  margin-top: 6px;
+}
+
+.tag {
+  border-radius: 10px;
+  margin: 5px;
+  padding: 5px;
+  background-color: #343249;
+  color: #d6d0d0;
+  font-size: 14px;
+}
+
+.tag:visited {
+  color: #d6d0d0;
+}

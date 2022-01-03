@@ -22,7 +22,7 @@ export const BlogSummary: FC<Props> = ({posts}) => {
             <div className={styles.tags}>
               <BiPurchaseTagAlt />
                 {post.tags.map(tag => (
-                  <a className={styles.tag} href={`/tags/${tag}`}>{tag}</a>
+                  <a className={styles.tag} href={`/tags/${tag}`} key={tag}>{tag}</a>
                 ))}
             </div>
           </li>
