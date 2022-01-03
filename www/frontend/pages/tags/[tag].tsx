@@ -14,8 +14,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await fetchPosts();
   const tags = getTags(posts);
   const paths = tags.tags.map((t) => {return `/tags/${t.name}`;})
-  console.log("tags");
-  console.log(paths);
   return {
     paths,
     fallback: false

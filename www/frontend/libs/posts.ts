@@ -35,7 +35,7 @@ const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>): p
     text: mpost.content,
     url: buildSiteURL(post),
     name: post,
-    path: `./post/${post}`,
+    path: `/post/${post}`,
   };
   return ret;
 }
