@@ -1,6 +1,7 @@
 import {GetStaticPaths, GetStaticProps} from 'next';
 import {useEffect, useState} from 'react';
 import {marked} from "marked";
+import {BlogTags} from "../../components/BlogTags"
 import {PageHead} from "../../components/PageHead";
 import {TwitterShareButton, TwitterIcon} from 'react-share';
 import {postData, fetchPost, fetchPathList} from "../../libs/posts";
@@ -59,9 +60,7 @@ const Article: NextPage<Props> = ({post}) => {
       <div className="postDescription">
       <h1>{post.title}</h1>
       posted on {post.date}
-      <ul>{post.tags.map((t,i)=>
-        <li key={i}>{t}</li>)
-      }</ul>
+      <BlogTags tags={post.tags}/>
       </div>
       <div className="postBody">
         <div dangerouslySetInnerHTML={{__html: renderMD(post.text)}}></div>
