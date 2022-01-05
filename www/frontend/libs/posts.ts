@@ -1,5 +1,6 @@
-import {buildPostListURL, buildPostURL, buildSiteURL} from "./settings"
+import {buildPostListURL, buildPostURL, buildFileURL , buildSiteURL} from "./settings"
 import * as yaml from "js-yaml"
+import request from "request";
 import matter from "gray-matter"
 
 export interface posts {
@@ -13,6 +14,7 @@ export interface postData {
   url: string;
   name: string;
   path: string;
+  ogpImagePath: string;
 }
 
 export const fetchPathList = async (): Promise<string[]> => {
@@ -25,7 +27,7 @@ export const fetchPathList = async (): Promise<string[]> => {
   return postNames;
 };
 
-const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>): postData => {
+const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>, ogppath: string): postData => {
   console.log(mpost.data["tags"]);
   //ほんとに引数の型あってる？
   const ret: postData = {
@@ -36,27 +38,26 @@ const mattertoPostData = (post: string, mpost: matter.GrayMatterFile<string>): p
     url: buildSiteURL(post),
     name: post,
     path: `/post/${post}`,
+    ogpImagePath: `https://gotti.dev/post/${post}/${ogppath}`,
   };
   return ret;
 }
 
 export const fetchPost = async (post: string): Promise<postData> => {
-  console.log(post);
-  console.log(buildPostURL(post));
   const p = await fetch(buildPostURL(post));
   const rawpost = await p.text();
   const mpost = matter(rawpost);
-  const ret = mattertoPostData(post, mpost);
+  const ipath = mpost.content.match(/\!\[.+\]\((.+)\)/);
+  const imagepath = ipath === null ? "" : ipath[1];
+  const ret = mattertoPostData(post, mpost, imagepath);
+  console.log(ret);
   return ret;
 }
 
 export const fetchPosts = async (): Promise<postData[]> => {
   const postlist = await fetchPathList()
   const posts = postlist.map(async (post: string) => {
-    const p = await fetch(buildPostURL(post));
-    const rawpost = await p.text();
-    const mpost = matter(rawpost);
-    const ret = mattertoPostData(post, mpost);
+    const ret = await fetchPost(post);
     return ret;
   })
   const ret = Promise.all(posts)

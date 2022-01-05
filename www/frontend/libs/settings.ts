@@ -20,8 +20,12 @@ export const buildSiteURL = (post: string) :string => {
   return ret;
 }
 
+export const buildFileURL = (post: string, file: string) :string => {
+  return `${githubSetting.rawcontenturl}/${githubSetting.user}/${githubSetting.repository}/${githubSetting.branch}/${githubSetting.directory}/contents/post/${post}/${file}`;
+};
+
 export const buildPostURL = (post: string) :string => {
-  return `${githubSetting.rawcontenturl}/${githubSetting.user}/${githubSetting.repository}/${githubSetting.branch}/${githubSetting.directory}/contents/post/${post}/index.md`;
+  return buildFileURL(post, "index.md");
 };
 
 export const buildPostListURL = () :string => {

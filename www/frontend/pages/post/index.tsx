@@ -11,7 +11,7 @@ interface Props {
 const Post: FC<Props> = ({posts}) => {
   return (
     <>
-      <PageHead title="Post" />
+      <PageHead title="Post" imageUrl=""/>
       <h2>Post</h2>
       <BlogSummary posts={posts} />
     </>

@@ -1,5 +1,4 @@
 import {GetStaticPaths, GetStaticProps} from 'next';
-import {useEffect, useState} from 'react';
 import {marked} from "marked";
 import {BlogTags} from "../../components/BlogTags"
 import {PageHead} from "../../components/PageHead";
@@ -36,7 +35,7 @@ const renderMD = (text: string): string => {
       return hljs.highlightAuto(code, [lang]).value
     }
   });
-  const html : string = marked(text);
+  const html: string = marked(text);
   return setInpageLink(html);
 };
 
@@ -45,9 +44,7 @@ interface Props {
 }
 
 export const getStaticProps = async ({params}) => {
-  console.log("params", params.article);
   const post = await fetchPost(params.article);
-  console.log(post);
   return {
     props: {post}
   }
@@ -56,11 +53,11 @@ export const getStaticProps = async ({params}) => {
 const Article: NextPage<Props> = ({post}) => {
   return (
     <>
-      <PageHead title={post.title} />
+      <PageHead title={post.title} imageUrl={post.ogpImagePath}/>
       <div className="postDescription">
-      <h1>{post.title}</h1>
-      posted on {post.date}
-      <BlogTags tags={post.tags}/>
+        <h1>{post.title}</h1>
+        posted on {post.date}
+        <BlogTags tags={post.tags} />
       </div>
       <div className="postBody">
         <div dangerouslySetInnerHTML={{__html: renderMD(post.text)}}></div>
