@@ -16,7 +16,7 @@ export const PageHead: FC<Props> = ({title, imageUrl}) => {
       <meta name="og:title" content={title} />
       <meta name="og:image" content={image}></meta>
       <meta name="og:site_name" content="ごっちでぶ" />
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@0xg0tti" />
     </Head>
   )

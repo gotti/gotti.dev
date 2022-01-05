@@ -36,7 +36,7 @@ const renderMD = (text: string): string => {
     }
   });
   const html: string = marked(text);
-  return setInpageLink(html);
+  return html;
 };
 
 interface Props {
