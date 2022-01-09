@@ -12,22 +12,22 @@ export const githubSetting = {
   repository: "gotti.dev",
   branch: "main",
   directory: "www",
-  siteUrl: "https://gotti.dev/post"
+  siteUrl: "https://gotti.dev/post",
 };
 
-export const buildSiteURL = (post: string) :string => {
+export const buildSiteURL = (post: string): string => {
   const ret: string = `${githubSetting.siteUrl}/${post}`;
   return ret;
-}
+};
 
-export const buildFileURL = (post: string, file: string) :string => {
+export const buildFileURL = (post: string, file: string): string => {
   return `${githubSetting.rawcontenturl}/${githubSetting.user}/${githubSetting.repository}/${githubSetting.branch}/${githubSetting.directory}/contents/post/${post}/${file}`;
 };
 
-export const buildPostURL = (post: string) :string => {
+export const buildPostURL = (post: string): string => {
   return buildFileURL(post, "index.md");
 };
 
-export const buildPostListURL = () :string => {
+export const buildPostListURL = (): string => {
   return `${githubSetting.rawcontenturl}/${githubSetting.user}/${githubSetting.repository}/${githubSetting.branch}/${githubSetting.directory}/contents/blog.yaml`;
 };

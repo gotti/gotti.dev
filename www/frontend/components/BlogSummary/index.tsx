@@ -1,1 +1,1 @@
-export { BlogSummary } from "./BlogSummary"
+export { BlogSummary } from "./BlogSummary";

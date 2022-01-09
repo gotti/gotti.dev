@@ -1,1 +1,1 @@
-export { BlogTags } from "./BlogTags"
+export { BlogTags } from "./BlogTags";

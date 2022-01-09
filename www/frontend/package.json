@@ -13,6 +13,7 @@
     "@types/node": "^16.11.11",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
+    "canvas": "^2.8.0",
     "cheerio": "^1.0.0-rc.10",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.3.1",

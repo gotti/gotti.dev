@@ -1,8 +1,12 @@
 $phone: 760px;
 
 $breakpoints: (
-  'xs': (max-width: 992px),
-  'lg': (min-width: 992px),
+  "xs": (
+    max-width: 992px,
+  ),
+  "lg": (
+    min-width: 992px,
+  ),
 ) !default;
 
 @mixin mq($breakpoint) {
@@ -29,18 +33,18 @@ main {
   display: grid;
   font-family: "Yomogi";
   font-weight: bold;
-  @include mq(lg){
+  @include mq(lg) {
     height: 100vh;
     grid-template-columns: 300px 1fr;
-    grid-template-areas:
-      "Menu Home";
+    grid-template-areas: "Menu Home";
   }
-  @include mq(xs){
+  @include mq(xs) {
     grid-template-columns: 100%;
     height: 100vh;
     grid-template-rows: auto 1fr;
-    grid-template-areas: "Menu"
-                         "Home";
+    grid-template-areas:
+      "Menu"
+      "Home";
   }
 }
 
@@ -55,7 +59,7 @@ main {
 }
 
 img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 pre {
@@ -63,7 +67,7 @@ pre {
   background: #323249;
   color: #d6d0d0;
   overflow: auto;
-  font-family: 'Source Code Pro', monospace;
+  font-family: "Source Code Pro", monospace;
 }
 
 code {

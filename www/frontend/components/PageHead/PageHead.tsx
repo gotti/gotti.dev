@@ -1,13 +1,13 @@
-import Head from 'next/head'
-import {FC} from "react";
+import Head from "next/head";
+import { FC } from "react";
 
 interface Props {
   title: string;
   imageUrl: string;
 }
 
-export const PageHead: FC<Props> = ({title, imageUrl}) => {
-  const image = imageUrl=="" ? "https://gotti.dev" : imageUrl;
+export const PageHead: FC<Props> = ({ title, imageUrl }) => {
+  const image = imageUrl == "" ? "https://gotti.dev" : imageUrl;
   return (
     <Head>
       <title>{title} ごっちでぶ</title>
@@ -19,6 +19,5 @@ export const PageHead: FC<Props> = ({title, imageUrl}) => {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@0xg0tti" />
     </Head>
-  )
-}
-
+  );
+};
