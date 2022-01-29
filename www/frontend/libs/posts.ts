@@ -16,6 +16,7 @@ export interface postData {
   date: Date;
   tags: string[];
   text: string;
+  html: string;
   url: string;
   name: string;
   path: string;

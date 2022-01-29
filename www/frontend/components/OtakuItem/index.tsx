@@ -1,0 +1,1 @@
+export { OtakuItem } from "./OtakuItem";

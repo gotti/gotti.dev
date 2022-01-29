@@ -10,6 +10,9 @@ export const Menu: NextPage = () => {
         <li>
           <Link href="/post">Post</Link>
         </li>
+        <li>
+          <Link href="/environment">Env</Link>
+        </li>
       </ul>
     </>
   );

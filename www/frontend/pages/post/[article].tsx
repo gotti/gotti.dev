@@ -1,12 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { marked } from "marked";
+//import { marked } from "marked";
 import { BlogTags } from "../../components/BlogTags";
 import { PageHead } from "../../components/PageHead";
 import { TwitterShareButton, TwitterIcon } from "react-share";
 import { postData, fetchPost, fetchPathList } from "../../libs/posts";
-import hljs from "highlight.js";
+//import hljs from "highlight.js";
 import cheerio from "cheerio";
+import markdownToHtml from "zenn-markdown-html";
 import "highlight.js/styles/github-dark-dimmed.css";
+import 'zenn-content-css';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await fetchPathList();
@@ -31,13 +33,13 @@ const setInpageLink = (html: string): string => {
 };
 
 const renderMD = (text: string): string => {
-  marked.setOptions({
+  /*marked.setOptions({
     langPrefix: "",
     highlight: (code: string, lang: string) => {
       return hljs.highlightAuto(code, [lang]).value;
     },
-  });
-  const html: string = marked(text);
+  });*/
+  const html: string = markdownToHtml(text);
   return html;
 };
 
@@ -47,6 +49,7 @@ interface Props {
 
 export const getStaticProps = async ({ params }) => {
   const post = await fetchPost(params.article);
+  post.html = renderMD(post.text);
   return {
     props: { post },
   };
@@ -62,7 +65,7 @@ const Article: NextPage<Props> = ({ post }) => {
         <BlogTags tags={post.tags} />
       </div>
       <div className="postBody">
-        <div dangerouslySetInnerHTML={{ __html: renderMD(post.text) }}></div>
+        <div dangerouslySetInnerHTML={{ __html: post.html }}></div>
       </div>
       <TwitterShareButton title={post.title} url={post.url}>
         <TwitterIcon size={32} round={true} />
