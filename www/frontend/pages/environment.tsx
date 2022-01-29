@@ -2,6 +2,7 @@ import { FC } from "react";
 import Link from "next/link";
 import { PageHead } from "../components/PageHead";
 import { OtakuItem } from "../components/OtakuItem"
+import { TwitterShareButton, TwitterIcon } from "react-share";
 
 const Page: FC = () => {
   return (
@@ -75,6 +76,9 @@ const Page: FC = () => {
         <li>これはwifi6非対応だけど対応してるモデルもあるらしい</li>
         </ul>
       </OtakuItem>
+      <TwitterShareButton title="Environment" url="https://gotti.dev/environment/">
+        <TwitterIcon size={32} round={true} />
+      </TwitterShareButton>
     </>
   );
 };
