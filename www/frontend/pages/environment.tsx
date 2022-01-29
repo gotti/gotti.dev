@@ -75,6 +75,8 @@ const Page: FC = () => {
         <li>これはwifi6非対応だけど対応してるモデルもあるらしい</li>
         </ul>
       </OtakuItem>
+      <OtakuItem name=":oni:" imagePath="/images/environment/oni.webp"
+        description="徒歩部じゃないので使ったことない。"/>
       <TwitterShareButton title="Environment" url="https://gotti.dev/environment/">
         <TwitterIcon size={32} round={true} />
       </TwitterShareButton>
