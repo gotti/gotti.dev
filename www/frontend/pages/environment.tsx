@@ -7,7 +7,7 @@ import { TwitterShareButton, TwitterIcon } from "react-share";
 const Page: FC = () => {
   return (
     <>
-      <PageHead title="Env" imageUrl="" />
+      <PageHead title="Environment" imageUrl="" />
       <h1>Env</h1>
       ここは環境を自慢するページです。
       <OtakuItem name="全体" imagePath="/images/environment/overall.webp"
@@ -46,7 +46,6 @@ const Page: FC = () => {
       <OtakuItem name="larch" imagePath="/images/environment/larch.webp">
         <ul>
         <li>OS: win10(おうち唯一)</li>
-        <li>VMいっぱい生やしくん</li>
         <li>お迎えは2020年</li>
         </ul>
       </OtakuItem>
