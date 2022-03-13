@@ -9,7 +9,7 @@
     "fmt": "prettier --write ."
   },
   "dependencies": {
-    "@types/node": "^16.11.11",
+    "@types/node": "16.11.26",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "canvas": "^2.8.0",
