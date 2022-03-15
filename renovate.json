@@ -3,6 +3,6 @@
     "config:base"
   ],
   "kubernetes": {
-    "fileMatch": ["manifests/\\.+(yaml|yml)$"]
+    "fileMatch": ["manifests/.+\\.yaml$"]
   }
 }
