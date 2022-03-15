@@ -1,7 +1,7 @@
 {
   "extends": [
     "config:base"
-  ]
+  ],
   "kubernetes": {
     "fileMatch": ["^manifests/\\.yaml$"]
   }
