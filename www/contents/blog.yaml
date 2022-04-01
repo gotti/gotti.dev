@@ -1,4 +1,5 @@
 posts:
+  - "./post/koken_blog_relay_2022_ramen"
   - "./post/kokenadvent2021_plarailbackend"
   - "./post/uecadvent2021_knative"
   - "./post/uecadvent2021_fileserver"
