@@ -60,7 +60,7 @@ main {
 
 img {
   @include mq(lg) {
-    max-width: 800px;
+    width: min(100%, 800px);
   }
   @include mq(xs) {
     max-width: 100%;
