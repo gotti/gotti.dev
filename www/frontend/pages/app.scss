@@ -59,7 +59,12 @@ main {
 }
 
 img {
-  max-width: 100%;
+  @include mq(lg) {
+    max-width: 800px;
+  }
+  @include mq(xs) {
+    max-width: 100%;
+  }
 }
 
 pre {
