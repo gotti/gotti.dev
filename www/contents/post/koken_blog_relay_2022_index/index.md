@@ -14,3 +14,6 @@ tags: ["koken"]
 
 - 4/3
 [ボリューム抵抗燃やし太郎 工研新歓ブログリレー3日目](https://ta729ip.github.io/ta729ip_blog/posts/koken-relay/)
+
+- 4/6
+[Lunatic電通生もっちゃんの部屋 工学研究部に入るには](https://mocchan.dev/koken/koken-blog-relay-2022-day6/)
