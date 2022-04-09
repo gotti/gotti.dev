@@ -15,5 +15,20 @@ tags: ["koken"]
 - 4/3
 [ボリューム抵抗燃やし太郎 工研新歓ブログリレー3日目](https://ta729ip.github.io/ta729ip_blog/posts/koken-relay/)
 
+- 4/4
+あずきバー 落としてるらしい
+
+- 4/5
+ごっちでぶ 落としてます、そのうち
+
 - 4/6
 [Lunatic電通生もっちゃんの部屋 工学研究部に入るには](https://mocchan.dev/koken/koken-blog-relay-2022-day6/)
+
+- 4/7
+[捻れたパピルス あらゆる努力は実らない](https://hutinoatari.github.io/blog/never-efforts-pay-off/)
+
+- 4/8
+[電気通信大学II類電子情報学プログラムの3年間 - uec19bのブログ ](https://uec19b.hatenablog.com/entry/2022/04/08/233739)
+
+- 4/9
+[電気通信大学で生き残るための序盤の布石 Lunatic電通生もっちゃんの部屋](https://mocchan.dev/koken/koken-blog-relay-2022-day9/)
