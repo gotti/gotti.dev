@@ -32,3 +32,9 @@ tags: ["koken"]
 
 - 4/9
 [電気通信大学で生き残るための序盤の布石 Lunatic電通生もっちゃんの部屋](https://mocchan.dev/koken/koken-blog-relay-2022-day9/)
+
+- 4/10
+[Kienn's note Rで関数のグラフを作った話](https://kienn-hcl.github.io/mysite/posts/creategraphinr/)
+
+- 4/11
+[otariidae ねんねんころりよ 陰謀論者はいつ眠る](https://gist.github.com/otariidae/62b72a8d541cc7f6666b12e99a6a3f11)
