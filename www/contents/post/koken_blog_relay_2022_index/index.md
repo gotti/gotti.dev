@@ -38,3 +38,6 @@ tags: ["koken"]
 
 - 4/11
 [otariidae ねんねんころりよ 陰謀論者はいつ眠る](https://gist.github.com/otariidae/62b72a8d541cc7f6666b12e99a6a3f11)
+
+- 4/12
+[ぼいど UEC Lifeを自動化するTips](https://zenn.dev/k1ch/articles/69403723d34266)
