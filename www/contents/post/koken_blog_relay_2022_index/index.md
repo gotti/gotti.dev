@@ -13,7 +13,7 @@ tags: ["koken"]
 [りんりんログ 工研新歓ブログリレー](https://lnln.dev/blog/2022/04/02/%E5%B7%A5%E7%A0%94%E6%96%B0%E6%AD%93%E3%83%96%E3%83%AD%E3%82%B0%E3%83%AA%E3%83%AC%E3%83%BC2022/#more)
 
 - 4/3
-[ボリューム抵抗燃やし太郎 工研新歓ブログリレー3日目](https://ta729ip.github.io/ta729ip_blog/posts/koken-relay/)
+[ボリューム抵抗燃やし太郎 工研新歓ブログリレー3日目](https://ta729ip.dev/posts/koken-relay/)
 
 - 4/4
 あずきバー 落としてるらしい
