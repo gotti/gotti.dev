@@ -5,7 +5,7 @@ WORKDIR /frontend
 COPY ./contents /frontend
 COPY ./frontend /frontend
 
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 RUN rm -rf /frontend/node_modules
