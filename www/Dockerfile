@@ -1,4 +1,4 @@
-FROM node as builder
+FROM node:17-bullseye as builder
 
 WORKDIR /frontend
 
