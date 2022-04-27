@@ -7,6 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ main ]
+  pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,12 +37,17 @@ jobs:
           echo $GITHUB_SHA
           echo "GIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+        id: extract_branch
+
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@v2
         with:
           context: ./www
           platforms: linux/amd64
-          push: true
+          push: ${{ steps.extract_branch.outputs.branch == 'main' }}
           tags: ghcr.io/gotti/nginx-static:${{ env.GIT_SHA }}
 
 
