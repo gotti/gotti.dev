@@ -58,6 +58,7 @@ Harvester HCI自体がRKE2クラスタなのでそこで一緒にRancherも動�
 
 > Run Rancher on a Separate Cluster
 > Don’t run other workloads or microservices in the Kubernetes cluster that Rancher is installed on.
+
 https://rancher.com/docs/rancher/v2.6/en/best-practices/rancher-server/deployment-types/#run-rancher-on-a-separate-cluster
 
 とのこと。
@@ -113,3 +114,7 @@ WindowsをインストールしてCrystalDiskMarkを走らせてみました。�
 ![longhorn speedtest](./longhorn-speed.png)
 
 公称はリード3400MB/sなので63%ぐらいの力は出ているのでしょうか。分散ストレージの上で動いているにしてはまあまあ出ているかなと思います。条件がNVMeなこと以外全然違うので参考程度ですが、一度だけ試したkubevirt on rook/cephよりwriteが1桁高速な気がします。cephほど厳密に書き込みをやってないんでしょうかね。
+
+## 余談3
+
+おうちのインフラを全てこれに乗せたいなと思ったのですが全部のSSD
