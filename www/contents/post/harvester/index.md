@@ -59,7 +59,7 @@ Harvester HCI自体がRKE2クラスタなのでそこで一緒にRancherも動�
 > Run Rancher on a Separate Cluster
 > Don’t run other workloads or microservices in the Kubernetes cluster that Rancher is installed on.
 
-https://rancher.com/docs/rancher/v2.6/en/best-practices/rancher-server/deployment-types/#run-rancher-on-a-separate-cluster
+[https://rancher.com/docs/rancher/v2.6/en/best-practices/rancher-server/deployment-types/#run-rancher-on-a-separate-cluster](https://rancher.com/docs/rancher/v2.6/en/best-practices/rancher-server/deployment-types/#run-rancher-on-a-separate-cluster)
 
 とのこと。
 
