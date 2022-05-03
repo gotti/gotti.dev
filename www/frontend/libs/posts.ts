@@ -38,7 +38,6 @@ const mattertoPostData = (
   mpost: matter.GrayMatterFile<string>,
   ogppath: string
 ): postData => {
-  console.log(mpost.data["tags"]);
   //ほんとに引数の型あってる？
   const ret: postData = {
     title: mpost.data["title"],
@@ -60,7 +59,6 @@ export const fetchPost = async (post: string): Promise<postData> => {
   const ipath = mpost.content.match(/\!\[.+\]\((.+)\)/);
   const imagepath = ipath === null ? "" : ipath[1];
   const ret = mattertoPostData(post, mpost, imagepath);
-  console.log(ret);
   return ret;
 };
 
