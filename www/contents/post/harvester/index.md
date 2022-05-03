@@ -117,4 +117,6 @@ WindowsをインストールしてCrystalDiskMarkを走らせてみました。�
 
 ## 余談3
 
-おうちのインフラを全てこれに乗せたいなと思ったのですが全部のSSD
+おうちのインフラを全てこれに乗せたいなと思ったのですが全部SSDはお金が足りないのでHDDと混在できるこれを待っています。
+
+[https://github.com/harvester/harvester/issues/1820](https://github.com/harvester/harvester/issues/1820)
