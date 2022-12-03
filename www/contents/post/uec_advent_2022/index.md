@@ -46,9 +46,9 @@ VMやコンテナを動かしましょう。ところでVMやコンテナの管�
 
 ### ところでKubernetesってどう通信してるの
 
-Kubernetes自身はほぼネットワークに関わらずCNI(Container Network Interface)に任せています。CNIにはいろいろな実装があり、CalicoとかFlannelとかCiliumが有名ではないでしょうか。CNIには次の最低限の2つの機能を持っているのがほとんどで、IPアドレスの割り当て、オーバーレイネットワーク構築などによるコンテナ間通信の確保です。さきほど挙げたCNIは全てBGPやVXLANを使って自身でオーバーレイネットワークを構築するなどの機能を持っています[cni]。この機能についてはmeshoverが責任を持つためCNIには前者だけやってもらえばいいです。
+Kubernetes自身はほぼネットワークに関わらずCNI(Container Network Interface)に任せています。CNIにはいろいろな実装があり、CalicoとかFlannelとかCiliumが有名ではないでしょうか。CNIには次の最低限の2つの機能を持っているのがほとんどで、IPアドレスの割り当て、オーバーレイネットワーク構築などによるコンテナ間通信の確保です。さきほど挙げたCNIは全てBGPやVXLANを使って自身でオーバーレイネットワークを構築するなどの機能を持っています[^cni]。この機能についてはmeshoverが責任を持つためCNIには前者だけやってもらえばいいです。
 
-前者のIPアドレス管理だけをやるCNIとして[Cilium(Native Routingモード)](https://docs.cilium.io/en/stable/concepts/networking/routing/#id2)や[Coil](https://github.com/cybozu-go/coil)などがあります[calico]。Ciliumにはおまけ機能が充実していたりと楽しいので私はCiliumを選択しました。
+前者のIPアドレス管理だけをやるCNIとして[Cilium(Native Routingモード)](https://docs.cilium.io/en/stable/concepts/networking/routing/#id2)や[Coil](https://github.com/cybozu-go/coil)などがあります[^calico]。Ciliumにはおまけ機能が充実していたりと楽しいので私はCiliumを選択しました。
 
 これも詳細な手順はmeshoverのgithubに上げているので雑に説明します。
 
@@ -76,5 +76,5 @@ Kubernetes自身はほぼネットワークに関わらずCNI(Container Network 
 
 ## 注釈
 
-[cni]: meshoverはKubernetesクラスタ外とも通信したりIPv6でVPNを張ったりするため、これらでは代替できません。
-[calico]: calicoにも似たような機能があるらしいんですが未調査です。
+[^cni]: meshoverはKubernetesクラスタ外とも通信したりIPv6でVPNを張ったりするため、これらでは代替できません。
+[^calico]: calicoにも似たような機能があるらしいんですが未調査です。
