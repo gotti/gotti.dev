@@ -66,6 +66,7 @@ export const fetchPosts = async (): Promise<postData[]> => {
   const postlist = await fetchPathList();
   const posts = postlist.map(async (post: string) => {
     const ret = await fetchPost(post);
+    ret.tags.forEach((v, i, arr) => arr[i] = v.toLowerCase())
     return ret;
   });
   const ret = Promise.all(posts);
@@ -84,7 +85,7 @@ interface Tags {
 export const getTags = (posts: postData[]): Tags => {
   let tags = new Map<string, postData[]>();
   for (const p of posts) {
-    for (const t of p.tags) {
+    for (const t of p.tags.map((t) => t.toLowerCase())) {
       if (tags[t] == undefined) {
         tags[t] = [];
       }

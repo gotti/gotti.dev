@@ -1,7 +1,7 @@
 ---
 title: "調布祭プラレール2021を支えるインフラ"
 date: "2021-11-24"
-tags: ["chofufes", "infra", "k8s"]
+tags: ["chofufes", "infra", "kubernetes"]
 ---
 
 # 調布祭プラレールって？
