@@ -32,8 +32,6 @@ a:visited {
 
 main {
   display: grid;
-  font-family: "Yomogi";
-  font-weight: bold;
   @include mq(lg) {
     height: 100vh;
     grid-template-columns: 300px 1fr;
