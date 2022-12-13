@@ -96,7 +96,7 @@ Kubernetes自身はほぼネットワークに関わらずCNI(Container Network 
 
 さて、さっそくコンテナを動かしてみましょう。meshoverはKubernetesを入れるパソコンと、実際にコマンドを叩くメイン機に導入しています。
 
-![](./meshover-example.png)
+![](meshover-example.png)
 
 このコンテナはKubernetesをインストールしたどのパソコンで動くのかわかりません。自宅で動いている可能性もありますし実家の可能性もあります。(指定はできますが)
 
@@ -111,9 +111,9 @@ tmp-shell  ~  ip a
     link/ether aa:aa:aa:aa:aa:aa brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 10.228.0.160/32 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 2403:bd80:c000:2fff::f0/128 scope global nodad 
+    inet6 24xx:xxxx:xxxx.../128 scope global nodad 
        valid_lft forever preferred_lft forever
-    inet6 fe80::e0b8:c5ff:fee7:bc91/64 scope link 
+    inet6 fe80::xxxx/64 scope link 
        valid_lft forever preferred_lft forever
 tmp-shell  ~  tracepath 1.1.1.1
  1?: [LOCALHOST]                      pmtu 1500
