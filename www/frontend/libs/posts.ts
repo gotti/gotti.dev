@@ -56,8 +56,9 @@ export const fetchPost = async (post: string): Promise<postData> => {
   const p = await fetch(buildPostURL(post));
   const rawpost = await p.text();
   const mpost = matter(rawpost);
-  const ipath = mpost.content.match(/\!\[.+\]\((.+)\)/);
+  const ipath = mpost.content.match(/\!\[.*\]\((.*)\)/);
   const imagepath = ipath === null ? "" : ipath[1];
+  console.log(ipath[1]);
   const ret = mattertoPostData(post, mpost, imagepath);
   return ret;
 };
