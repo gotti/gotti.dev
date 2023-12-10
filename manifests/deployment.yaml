@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: gotti-dev
-        image: ghcr.io/gotti/nginx-static:TAG_PLACEHOLDER
+        image: ghcr.io/gotti/nginx-static:62894b9
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80
