@@ -237,10 +237,8 @@ func withDiv(id string, s template.HTML) template.HTML {
 
 func (g *Generator) generateLayout(md *mdparser.Root) template.HTML {
 	title := g.config.DefaultMetaData.SiteName
-	if md.MetaData.Title == nil {
-	} else {
-		tmp := *md.MetaData.Title
-		title = &tmp
+	if md.MetaData.Title != nil {
+		title = md.MetaData.Title
 	}
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "layout", struct {
