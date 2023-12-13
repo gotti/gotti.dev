@@ -30,11 +30,11 @@ func replaceInlineCode(text string) string {
 }
 
 func replaceInlineLink(text string) string {
-	exre := regexp.MustCompile(`\[(.*)\]\((.+?)\)`)
+	exre := regexp.MustCompile(`\[(.*?)\]\((.+?)\)`)
 	return exre.ReplaceAllString(text, "<a href=\"$2\">$1</a>")
 }
 
 func replaceInlineImage(text string) string {
-	re := regexp.MustCompile(`!\[(.*)\]\((.+?)\)`)
+	re := regexp.MustCompile(`!\[(.*?)\]\((.+?)\)`)
 	return re.ReplaceAllString(text, "<div><div>$1</div><div><img src=\"$2\" alt=\"$1\" /></div></div>")
 }

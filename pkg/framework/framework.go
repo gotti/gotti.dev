@@ -204,10 +204,19 @@ func (g *Generator) generateHeader(meta *MetaData) template.HTML {
 	return template.HTML(buf.String())
 }
 
-func (g *Generator) generatePost(child template.HTML) template.HTML {
+func (g *Generator) generateTitle(title *string) template.HTML {
+	if title == nil {
+		return ""
+	}
+	buf := new(bytes.Buffer)
+	g.templates.ExecuteTemplate(buf, "title", title)
+	return template.HTML(buf.String())
+}
+
+func (g *Generator) generatePost(title *string, child template.HTML) template.HTML {
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "post", child)
-	return withDiv("content", template.HTML(buf.String()))
+	return withDiv("content", g.generateTitle(title) + template.HTML(buf.String()))
 }
 
 func (g *Generator) generatePage() template.HTML {
@@ -239,7 +248,7 @@ func (g *Generator) generateLayout(md *mdparser.Root) template.HTML {
 		Body template.HTML
 	}{
 		Head: g.generateHeader(g.config.DefaultMetaData.WithDefault(title, md.MetaData.Thumbnail)),
-		Body: g.generateMenu() + g.generatePost(template.HTML(md.Objects.ToHTML())),
+		Body: g.generateMenu() + g.generatePost(md.MetaData.Title, template.HTML(md.Objects.ToHTML())),
 	})
 	return template.HTML(buf.String())
 }
