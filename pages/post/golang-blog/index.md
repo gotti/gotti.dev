@@ -12,7 +12,7 @@ thumbnail: "https://gotti.dev/post/golang-blog/many-many-updates.png"
 
 ## 以前のブログ
 
-以前のブログはNext.jsで作っていました。Reactベースのフレームワークで便利だったのですが、ほとんど更新しないブログで依存パッケージの更新をするのが面倒になっていまいました。
+以前のブログはNext.jsで作っていました。Reactベースのフレームワークで便利だったのですが、ブログはほとんど更新しないのに依存パッケージの更新をするのが面倒になっていまいました。
 
 ![落ちるRenovate](./failing-tests.png)
 
