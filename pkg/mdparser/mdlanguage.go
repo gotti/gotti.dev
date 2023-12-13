@@ -555,11 +555,11 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 				}
 				for k, v := range f {
 					fmt.Printf("Parse FrontMatter: %v, %v\n", k, v)
+					v = strings.TrimPrefix(v, "\"")
+					v = strings.TrimSuffix(v, "\"")
 					switch k {
 					case "title":
 						tmp := v
-						tmp = strings.TrimPrefix(tmp, "\"")
-						tmp = strings.TrimSuffix(tmp, "\"")
 						root.MetaData.Title = &tmp
 					case "date":
 						v := strings.ReplaceAll(v, "\"", "")
