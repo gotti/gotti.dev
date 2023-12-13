@@ -37,10 +37,12 @@ type MetaData struct {
 // WithDefault returns the default value for the metadata
 func (m *MetaData) WithDefault(title *string, image *string) *MetaData {
 	if title != nil {
-		m.Title = title
+		tmp := *title
+		m.Title = &tmp 
 	}
 	if image != nil {
-		m.Image = image
+		tmp := *image
+		m.Image = &tmp
 	}
 	return m
 }
@@ -129,10 +131,6 @@ func (g *Generator) load() (map[string]*mdparser.Root ,error) {
 
 		//change the extension to html, if is not index.md
 		htmlPath := path[:len(path)-len(filepath.Ext(path))] + ".html"
-		t := md.MetaData.Title
-		if t != nil {
-			fmt.Printf("title %+v\n", *t)
-		}
 		if filepath.Base(path) != "index.md" {
 			htmlPath = path[:len(path)-len(filepath.Ext(path))] + "/index.html"
 		}
@@ -196,7 +194,7 @@ func (g *Generator) generateBlogIndex(pages map[string]*mdparser.Root) template.
 
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "post_index", posts)
-	return withDiv("content", template.HTML(buf.String()))
+	return withDiv("content", g.generateMenu() + template.HTML(buf.String()))
 
 }
 
@@ -229,12 +227,18 @@ func withDiv(id string, s template.HTML) template.HTML {
 }
 
 func (g *Generator) generateLayout(md *mdparser.Root) template.HTML {
+	title := g.config.DefaultMetaData.SiteName
+	if md.MetaData.Title == nil {
+	} else {
+		tmp := *md.MetaData.Title
+		title = &tmp
+	}
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "layout", struct {
 		Head template.HTML
 		Body template.HTML
 	}{
-		Head: g.generateHeader(g.config.DefaultMetaData.WithDefault(md.MetaData.Title, md.MetaData.Thumbnail)),
+		Head: g.generateHeader(g.config.DefaultMetaData.WithDefault(title, md.MetaData.Thumbnail)),
 		Body: g.generateMenu() + g.generatePost(template.HTML(md.Objects.ToHTML())),
 	})
 	return template.HTML(buf.String())

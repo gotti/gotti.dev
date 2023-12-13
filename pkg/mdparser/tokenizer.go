@@ -105,7 +105,6 @@ type LineBlockHeadingMatcher struct {
 // ParseOnce a line
 func (l LineBlockHeadingMatcher) ParseOnce(line string) (LineBlock, error) {
 	r := regexp.MustCompile(`^(#+)\s([^\s]+)`)
-	fmt.Printf("parsing: %v\n", line)
 	if r.MatchString(line) {
 		f := r.FindStringSubmatch(line)
 

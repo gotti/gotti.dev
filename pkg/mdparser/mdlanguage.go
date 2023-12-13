@@ -558,6 +558,8 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 					switch k {
 					case "title":
 						tmp := v
+						tmp = strings.TrimPrefix(tmp, "\"")
+						tmp = strings.TrimSuffix(tmp, "\"")
 						root.MetaData.Title = &tmp
 					case "date":
 						v := strings.ReplaceAll(v, "\"", "")
