@@ -5,7 +5,7 @@ tags: ["advent", "Golang"]
 thumbnail: "./many-many-updates.png"
 ---
 
-# はじめに
+## はじめに
 
 この記事は、[UEC Advent Calendar 2023](https://adventar.org/calendars/8698)の14日目の記事です。
 前の記事は、もっちゃんの[モチ娘、サークルをUEC大学公認まで育成ダービーの話。 ](https://mocchan.dev/daily-life/uec-advent-calendar-2023/)です。[なんかこの前も見てない？](https://adventar.org/calendars/8696)
