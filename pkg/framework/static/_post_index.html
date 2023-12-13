@@ -1,0 +1,13 @@
+{{ define "post_index" }}
+<div class="posts">
+{{ range .Posts }}
+<div class="postitem">
+<a href="{{ .Link }}">{{ .Title }}</a>
+{{ .Date.Format "2006-01-02" }}
+{{ range .Tags }}
+{{ . }}
+{{ end }}
+</div>
+{{ end }}
+</div>
+{{ end }}

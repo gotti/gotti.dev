@@ -1,0 +1,25 @@
+{
+  "layout": {
+    "name": "layout"
+  },
+  "default_metadata": {
+    "title": "ごっちでぶ",
+    "twitter_id": "0xg0tti",
+    "site_name": "ごっちでぶ"
+  },
+  "blog_path": "post",
+  "menu": [
+    {
+      "name": "Home",
+      "link": "/"
+    },
+    {
+      "name": "About",
+      "link": "/about/"
+    },
+    {
+      "name": "Blog",
+      "link": "/post/"
+    }
+  ] 
+}

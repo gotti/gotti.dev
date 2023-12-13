@@ -1,0 +1,11 @@
+{{ define "head" }}
+<title>{{.Title}}</title>
+<meta property="og:title" content="{{.Title}}">
+<meta property="twitter:site" content="{{.TwitterID}}">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="og:site_name" content="{{.SiteName}}">
+{{ if .Image }}
+<meta property="og:image" content="{{.Image}}">
+<meta property="twitter:image" content="{{.Image}}">
+{{ end }}
+{{ end }}

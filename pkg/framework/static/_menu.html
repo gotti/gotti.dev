@@ -1,0 +1,7 @@
+{{ define "menu" }}
+<ul>
+{{ range . }}
+<li>{{ template "menu_item" . }}</li>
+{{ end }}
+</ul>
+{{ end }}
