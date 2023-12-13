@@ -57,6 +57,11 @@ go.mod(jsでいうpackage.json)は以下のようになりました。普通の�
 
 ![依存](./gomod.png)
 
+PRは、こうなりました。
+
+![PR](./onepr.png)
+
+
 ## おわりに
 
 自作Markdownパーサのお手入れの方が苦しいかもしれん。。。

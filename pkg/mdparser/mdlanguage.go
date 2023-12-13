@@ -519,7 +519,7 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 	fmt.Printf("%v\n", lines)
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
-		//fmt.Printf("Parse: %v\n", l)
+		fmt.Printf("Parse: %v\n", l)
 		switch l.Type() {
 		case LineBlockTypeHeading:
 			tmp = append(tmp, &Heading{
@@ -537,7 +537,7 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 				return nil, fmt.Errorf("Parse List: %v", err)
 			}
 			tmp = append(tmp, list)
-			i += lastConsumed + 1
+			i += lastConsumed 
 		case LineBlockTypeOrderedListItem:
 			list, lastConsumed, err := parseOrderedListItems(lines[i:])
 			if err != nil {
