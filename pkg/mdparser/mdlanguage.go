@@ -562,7 +562,6 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 						tmp := v
 						root.MetaData.Title = &tmp
 					case "date":
-						v := strings.ReplaceAll(v, "\"", "")
 						t, err := time.Parse("2006-01-02", v)
 						if err != nil {
 							t2, err := time.Parse("2006-1-2", v)
