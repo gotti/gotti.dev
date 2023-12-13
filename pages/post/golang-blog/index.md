@@ -2,7 +2,7 @@
 title: "メンテが手軽な(本当ですか？)ブログシステム"
 date: "2023-12-14"
 tags: ["advent", "Golang"]
-thumbnail: "./many-many-updates.png"
+thumbnail: "https://gotti.dev/post/golang-blog/many-many-updates.png"
 ---
 
 ## はじめに
