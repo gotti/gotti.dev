@@ -46,11 +46,14 @@ DHCPv6-PDでIPv6アドレスを取得する．
 64bitと指定してるのに設定によっては56bitが降ってくることがある．これもバグ？
 [DUIDについてはこれを参照のこと](https://blog.ytn86.net/2020/02/edgerouter-dhcp-pd-ntteast-flets/)．
 
+DHCPv6-PDではデフォルトゲートウェイが降ってこないので，RAで受けとるように設定する．
+
 ```
 set interfaces ethernet eth0 dhcpv6-options duid '00:03:00:01:<MAC Address of eth0>'
 set interfaces ethernet eth0 dhcpv6-options pd 0 interface eth1 sla-id '1'
 set interfaces ethernet eth0 dhcpv6-options pd 0 length '64'
 #set interfaces ethernet eth0 hw-id '<MAC Address of eth0>'←コレ
+set interfaces ethernet eth0 ipv6 address autoconf
 ```
 
 うまくいくと，56bitか64bitのプレフィックスが降ってくる．
