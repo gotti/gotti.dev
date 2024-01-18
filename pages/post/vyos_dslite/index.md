@@ -61,12 +61,13 @@ set interfaces ethernet eth0 dhcpv6-options pd 0 length '56'
 set interfaces ethernet eth0 ipv6 address autoconf
 ```
 
-うまくいくと，64bitのプレフィックスが降ってくる．
+うまくいけば，`/64`のプレフィックスがインターフェースに割り当てられる．
+この`/64`のプレフィックスは，`/56`のIPv6アドレス + `sla-id`で決まる．
 
 ```
 $ ip a
 eth1
-    inet6 <redacted>/64 scope global 
+    inet6 2405:hoge:huga:ff01::piyo/64 scope global 
        valid_lft forever preferred_lft forever
 ```
 
@@ -75,6 +76,18 @@ LAN側にRAでプレフィックスを広報する．もし`/56`で受け取っ�
 ```
 set service router-advert interface eth1 default-preference 'high'
 set service router-advert interface eth1 prefix ::/64
+```
+
+もし`/56`の一部を他のインターフェースでも使いたい場合は，`sla-id`を以下のようにすればよい．
+
+```
+set interfaces ethernet eth0 dhcpv6-options pd 0 interface eth2 sla-id '2'
+```
+
+上の例だと，次のようなプレフィックスとなる．
+
+```
+2405:hoge:huga:ff02::piyo/64
 ```
 
 ## VyOSでDS-Lite
