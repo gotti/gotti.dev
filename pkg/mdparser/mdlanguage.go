@@ -239,7 +239,6 @@ func captureIndentedOrAbove(lines []LineBlock, indent int) ([]LineBlock) {
 func cleanUnnecessaryObjects(obj Object) Object {
 	o, ok := obj.(*Objects)
 	if ok {
-		fmt.Printf("Objects@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@: %v\n", obj)
 		if len(*o) == 1 {
 			return cleanUnnecessaryObjects((*o)[0])
 		}
@@ -404,19 +403,20 @@ func parseBlockQuote(lines []LineBlock) (Object, int, error) {
 
 func parseCodeBlock(lines []LineBlock) (Object, int, error) {
 	innerTexts := []string{}
-	consumed := 0
 	count := 0
+		fmt.Printf("Parse CodeBlock start: %v\n", lines[1])
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		if l.Type() == LineBlockTypeCodeStartOrEnd {
 			if count == 0 {
 				count++
 			} else {
+				fmt.Printf("Parse CodeBlock end: %v\n", lines[i-1])
 				return &CodeBlock{
 					TextObjectImpl: TextObjectImpl{
 						text: strings.Join(innerTexts, "\n"),
 					},
-				}, consumed, nil
+				}, i, nil
 			}
 		} else {
 			innerTexts = append(innerTexts, l.InnerText())

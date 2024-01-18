@@ -40,6 +40,11 @@ type LineBlock interface {
 	InnerText() string
 }
 
+type lineBlockCapInlineImpl struct {
+	btype     BlockType
+	inlines   []InlineBlock
+}
+
 type lineBlockImpl struct {
 	btype     BlockType
 	tokenText string
@@ -70,6 +75,7 @@ var matchers = []LineBlockMatcher{
 	LineBlockDividerMatcher{},
 	LineBlockPaginationMatcher{},
 	LineBlockTagsMatcher{},
+	LineBlockCodeStartOrEndMatcher{},
 	LineBlockSimpleMatcher{},
 }
 
@@ -254,6 +260,24 @@ func (l LineBlockPaginationMatcher) ParseOnce(line string) (LineBlock, error) {
 	r := regexp.MustCompile(`^---$`)
 	if r.MatchString(line) {
 		return &LineBlockPagination{lineBlockImpl: lineBlockImpl{btype: LineBlockTypePagination, tokenText: "---", innerText: ""}}, nil
+	}
+	return nil, fmt.Errorf("error parsing line: %v", line)
+}
+
+// LineBlockCode is a code block
+type LineBlockCode struct {
+	lineBlockImpl
+}
+
+// LineBlockCodeStartOrEndMatcher is a code block
+type LineBlockCodeStartOrEndMatcher struct {
+}
+
+// ParseOnce a line
+func (l LineBlockCodeStartOrEndMatcher) ParseOnce(line string) (LineBlock, error) {
+	r := regexp.MustCompile("^```$")
+	if r.MatchString(line) {
+		return &LineBlockCode{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeCodeStartOrEnd, tokenText: "```", innerText: ""}}, nil
 	}
 	return nil, fmt.Errorf("error parsing line: %v", line)
 }
