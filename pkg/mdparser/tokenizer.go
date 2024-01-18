@@ -40,11 +40,6 @@ type LineBlock interface {
 	InnerText() string
 }
 
-type lineBlockCapInlineImpl struct {
-	btype     BlockType
-	inlines   []InlineBlock
-}
-
 type lineBlockImpl struct {
 	btype     BlockType
 	tokenText string
