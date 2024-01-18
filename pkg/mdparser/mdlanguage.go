@@ -2,6 +2,7 @@ package mdparser
 
 import (
 	"fmt"
+	"html"
 	"strings"
 	"time"
 )
@@ -414,7 +415,7 @@ func parseCodeBlock(lines []LineBlock) (Object, int, error) {
 				fmt.Printf("Parse CodeBlock end: %v\n", lines[i-1])
 				return &CodeBlock{
 					TextObjectImpl: TextObjectImpl{
-						text: strings.Join(innerTexts, "\n"),
+						text: html.EscapeString(strings.Join(innerTexts, "\n")),
 					},
 				}, i, nil
 			}
