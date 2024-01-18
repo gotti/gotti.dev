@@ -43,33 +43,38 @@ Version:          VyOS 1.3.0-rc6
 ```
 
 DHCPv6-PDでIPv6アドレスを取得する．
-64bitと指定してるのに設定によっては56bitが降ってくることがある．これもバグ？
+64bitと指定しても，NTTからは問答無用で56bitが降ってくる．
+そのうえ64bit指定だと`sla-id`が効かず`/56`がそのまま割り当てられることになる．
+したがって，コマンドの見た目とは逆に，`/56`を指定することでインターフェースに`/64`で割り当てられた．
+
+なお試したバージョンが古いので，既に直っている可能性もある．
+
 [DUIDについてはこれを参照のこと](https://blog.ytn86.net/2020/02/edgerouter-dhcp-pd-ntteast-flets/)．
 
-DHCPv6-PDではデフォルトゲートウェイが降ってこないので，RAで受けとるように設定する．
+また，DHCPv6-PDではデフォルトゲートウェイが降ってこないので，RAで受けとるように設定する．
 
 ```
 set interfaces ethernet eth0 dhcpv6-options duid '00:03:00:01:<MAC Address of eth0>'
 set interfaces ethernet eth0 dhcpv6-options pd 0 interface eth1 sla-id '1'
-set interfaces ethernet eth0 dhcpv6-options pd 0 length '64'
+set interfaces ethernet eth0 dhcpv6-options pd 0 length '56'
 #set interfaces ethernet eth0 hw-id '<MAC Address of eth0>'←コレ
 set interfaces ethernet eth0 ipv6 address autoconf
 ```
 
-うまくいくと，56bitか64bitのプレフィックスが降ってくる．
+うまくいくと，64bitのプレフィックスが降ってくる．
 
 ```
 $ ip a
 eth1
-    inet6 <redacted>/56 scope global 
+    inet6 <redacted>/64 scope global 
        valid_lft forever preferred_lft forever
 ```
 
-/56の場合，適当に/64を切り出してRAでLAN側に配布する．/64の場合は`::/64`でもいけるのかな？
+LAN側にRAでプレフィックスを広報する．もし`/56`で受け取った場合は，適当に`/64`に切り出して広報する必要があるかもしれない．
 
 ```
 set service router-advert interface eth1 default-preference 'high'
-set service router-advert interface eth1 prefix <redacted>::/64
+set service router-advert interface eth1 prefix ::/64
 ```
 
 ## VyOSでDS-Lite
@@ -90,11 +95,15 @@ set protocols static interface-route 0.0.0.0/0 next-hop-interface tun0 # デフ�
 ## 課題
 
 スピードテストを回してみるとIPv6だと4Gbps，IPv4だと3Gbpsぐらいは出た．
-いっぽうVyOSのCPUが1つ使用率100%になる．VLANかルーティングのどっちが重いんだろうか．
-今のインフラではルータがproxmoxというハイパーバイザ上で動いている．そのうえproxmox内でLinuxブリッジを乱用している．
+いっぽうVyOSのCPUが1つ使用率100%になる．VLANかルーティングのどっちが重いのだろうか．
+今のインフラではルータがproxmoxというハイパーバイザ上で動いている．
+そのうえproxmox内でLinuxブリッジを乱用している．
 SR-IOVやVLANオフロードも試してみたい．今後の課題とする．
 
-## おわりに
+これまで光ネクストではONUからRAでプレフィックスを受け取っていた．
+この場合，ONUの配下にルータを複数台置くことができた．
+いっぽうDHCPv6-PDではアドレスを取り合うようで複数台置くことができないようだ．
+しょうがないので，このルータの下に他のルータを置くことにする．
 
 DS-Liteは一つのIPv4アドレスを多くのユーザで共有するため，セッション数の制限が厳しい．
 光ネクストでよく使われているPPPoEでは一つのグローバルIPを占有できていたが，[光クロスではPPPoEを提供するISPはほとんど無い](https://flets.com/cross/pppoe/isp.html)．
