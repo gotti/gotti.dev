@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"strings"
 )
 
 // BlockType is a type of block
@@ -205,7 +204,7 @@ func (l LineBlockTagsMatcher) ParseOnce(line string) (LineBlock, error) {
 			tags = append(tags, v[1])
 		}
 
-		return &LineBlockTags{Tags: tags, lineBlockImpl: lineBlockImpl{btype: LineBlockTypeTags, tokenText: strings.Join(tags, " ")}}, nil
+		return &LineBlockTags{Tags: tags, lineBlockImpl: lineBlockImpl{btype: LineBlockTypeTags, innerText: line}}, nil
 	}
 	return nil, fmt.Errorf("error parsing line: %v", line)
 }

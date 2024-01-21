@@ -423,6 +423,7 @@ func parseCodeBlock(lines []LineBlock) (Object, int, error) {
 				}, i, nil
 			}
 		} else {
+      fmt.Printf("Parse CodeBlock: %v, inner: %v\n", l, l.TokenText() + l.InnerText())
 			innerTexts = append(innerTexts, l.InnerText())
 		}
 	}
