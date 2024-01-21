@@ -25,7 +25,7 @@ func replaceInlineItalic(text string) string {
 }
 
 func replaceInlineCode(text string) string {
-	re := regexp.MustCompile("`(.+)`")
+	re := regexp.MustCompile("`(.+?)`")
 	return re.ReplaceAllString(text, "<code>$1</code>")
 }
 
