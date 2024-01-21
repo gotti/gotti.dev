@@ -176,7 +176,7 @@ func (c CodeBlock) String() string {
 
 // ToHTML returns the code block as HTML
 func (c CodeBlock) ToHTML() string {
-	return fmt.Sprintf("<pre>%s<code>%v</code></pre>", c.GetText())
+	return fmt.Sprintf("<pre>%s<code>%v</code></pre>", c.FileName, c.GetText())
 }
 
 // Divider is a divider object
