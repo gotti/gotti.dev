@@ -109,7 +109,7 @@ func (l LineBlockHeadingMatcher) ParseOnce(line string) (LineBlock, error) {
 	if r.MatchString(line) {
 		f := r.FindStringSubmatch(line)
 
-		return &LineBlockHeading{Level: len(f[1]) , lineBlockImpl: lineBlockImpl{btype: LineBlockTypeHeading, tokenText: f[1], innerText: f[2]}}, nil
+		return &LineBlockHeading{Level: len(f[1]), lineBlockImpl: lineBlockImpl{btype: LineBlockTypeHeading, tokenText: f[1], innerText: f[2]}}, nil
 	}
 	return nil, fmt.Errorf("error parsing line: %v", line)
 }
@@ -262,6 +262,7 @@ func (l LineBlockPaginationMatcher) ParseOnce(line string) (LineBlock, error) {
 // LineBlockCode is a code block
 type LineBlockCode struct {
 	lineBlockImpl
+	File string
 }
 
 // LineBlockCodeStartOrEndMatcher is a code block
@@ -270,9 +271,11 @@ type LineBlockCodeStartOrEndMatcher struct {
 
 // ParseOnce a line
 func (l LineBlockCodeStartOrEndMatcher) ParseOnce(line string) (LineBlock, error) {
-	r := regexp.MustCompile("^```$")
+	r := regexp.MustCompile("^```(.*)$")
 	if r.MatchString(line) {
-		return &LineBlockCode{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeCodeStartOrEnd, tokenText: "```", innerText: ""}}, nil
+		// extract "```<file>" from line
+		f := r.FindStringSubmatch(line)
+		return &LineBlockCode{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeCodeStartOrEnd, tokenText: "```", innerText: ""}, File: f[1]}, nil
 	}
 	return nil, fmt.Errorf("error parsing line: %v", line)
 }

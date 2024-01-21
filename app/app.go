@@ -29,5 +29,12 @@ func main() {
 		}
 		w.Write([]byte(d))
 	})
+	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			w.Write([]byte("Method not allowed, use post"))
+			return
+		}
+	})
 	http.ListenAndServe(":8080", nil)
 }

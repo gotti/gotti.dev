@@ -5,11 +5,11 @@ import (
 	"testing"
 )
 
-func TestParseList(t *testing.T){
+func TestParseList(t *testing.T) {
 	l := LineBlockTokenizer{}
-	data := []struct{
+	data := []struct {
 		inputLine string
-		expected LineBlock
+		expected  LineBlock
 	}{
 		{"- item1", &LineBlockListItem{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeListItem, tokenText: "- ", innerText: "item1"}}},
 		{"    hoge", &LineBlockIndented{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeIndented, tokenText: "    ", innerText: "hoge"}}},
@@ -31,11 +31,11 @@ func TestParseList(t *testing.T){
 	}
 }
 
-func TestParseTags(t *testing.T){
+func TestParseTags(t *testing.T) {
 	l := LineBlockTokenizer{}
-	data := []struct{
+	data := []struct {
 		inputLine string
-		expected LineBlock
+		expected  LineBlock
 	}{
 		{"#hoge #huga", &LineBlockTags{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeTags, tokenText: "hoge huga"}}},
 	}
@@ -54,14 +54,14 @@ func TestParseTags(t *testing.T){
 
 }
 
-func TestParseHeading(t *testing.T){
+func TestParseHeading(t *testing.T) {
 	l := LineBlockTokenizer{}
-	data := []struct{
+	data := []struct {
 		inputLine string
-		expected LineBlock
+		expected  LineBlock
 	}{
-		{"# hoge", &LineBlockHeading{Level: 1, lineBlockImpl: lineBlockImpl{ btype: LineBlockTypeHeading, tokenText: "#", innerText: "hoge"}}},
-		{"## hoge", &LineBlockHeading{Level: 2, lineBlockImpl: lineBlockImpl{ btype: LineBlockTypeHeading, tokenText: "##", innerText: "hoge"}}},
+		{"# hoge", &LineBlockHeading{Level: 1, lineBlockImpl: lineBlockImpl{btype: LineBlockTypeHeading, tokenText: "#", innerText: "hoge"}}},
+		{"## hoge", &LineBlockHeading{Level: 2, lineBlockImpl: lineBlockImpl{btype: LineBlockTypeHeading, tokenText: "##", innerText: "hoge"}}},
 	}
 	for _, d := range data {
 		actual, err := l.Tokenize(d.inputLine)

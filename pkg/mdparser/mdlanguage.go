@@ -167,6 +167,7 @@ func (b BlockQuote) ToHTML() string {
 // CodeBlock is a code block object
 type CodeBlock struct {
 	TextObjectImpl
+	FileName string
 }
 
 func (c CodeBlock) String() string {
@@ -175,7 +176,7 @@ func (c CodeBlock) String() string {
 
 // ToHTML returns the code block as HTML
 func (c CodeBlock) ToHTML() string {
-	return fmt.Sprintf("<pre><code>%v</code></pre>", c.GetText())
+	return fmt.Sprintf("<pre>%s<code>%v</code></pre>", c.GetText())
 }
 
 // Divider is a divider object
@@ -220,7 +221,7 @@ func (t Text) ToHTML() string {
 	return t.GetText()
 }
 
-func captureIndentedOrAbove(lines []LineBlock, indent int) ([]LineBlock) {
+func captureIndentedOrAbove(lines []LineBlock, indent int) []LineBlock {
 	indented := []LineBlock{}
 	for _, l := range lines {
 		if l.Type() == LineBlockTypeIndented {
@@ -298,15 +299,15 @@ func reTokenizeString(lines []string) ([]LineBlock, error) {
 func reTokenize(lines []LineBlock) ([]LineBlock, error) {
 	linesStr := []string{}
 	for _, l := range lines {
-		linesStr = append(linesStr, l.TokenText() + l.InnerText())
+		linesStr = append(linesStr, l.TokenText()+l.InnerText())
 	}
 	return reTokenizeString(linesStr)
 }
 
-func parseListItems(lines []LineBlock) (Object, int, error){
+func parseListItems(lines []LineBlock) (Object, int, error) {
 	list := &List{}
 	lastConsumed := len(lines) - 1
-	for i := 0; i < len(lines); i++{
+	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		fmt.Printf("Parse List Items: %v\n", l)
 		if l.Type() == LineBlockTypeListItem {
@@ -337,11 +338,10 @@ func parseListItems(lines []LineBlock) (Object, int, error){
 	return cleanUnnecessaryObjects(list), lastConsumed, nil
 }
 
-
-func parseOrderedListItems(lines []LineBlock) (Object, int, error){
+func parseOrderedListItems(lines []LineBlock) (Object, int, error) {
 	list := &OrderedList{}
 	lastConsumed := len(lines) - 1
-	for i := 0; i < len(lines); i++{
+	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		fmt.Printf("Parse List Items: %v\n", l)
 		if l.Type() == LineBlockTypeOrderedListItem {
@@ -397,7 +397,7 @@ func parseBlockQuote(lines []LineBlock) (Object, int, error) {
 	objs := parsed
 
 	return cleanUnnecessaryObjects(
-			&BlockQuote{
+		&BlockQuote{
 			Objects: objs.Objects,
 		}), consumed, err
 }
@@ -405,15 +405,18 @@ func parseBlockQuote(lines []LineBlock) (Object, int, error) {
 func parseCodeBlock(lines []LineBlock) (Object, int, error) {
 	innerTexts := []string{}
 	count := 0
-		fmt.Printf("Parse CodeBlock start: %v\n", lines[1])
+	filename := ""
+	fmt.Printf("Parse CodeBlock start: %v\n", lines[1])
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		if l.Type() == LineBlockTypeCodeStartOrEnd {
 			if count == 0 {
+				filename = l.(*LineBlockCode).File
 				count++
 			} else {
 				fmt.Printf("Parse CodeBlock end: %v\n", lines[i-1])
 				return &CodeBlock{
+					FileName: filename,
 					TextObjectImpl: TextObjectImpl{
 						text: html.EscapeString(strings.Join(innerTexts, "\n")),
 					},
@@ -456,7 +459,7 @@ func parseDivider(lines []LineBlock) (Object, int, error) {
 	return cleanUnnecessaryObjects(&Divider{Objects: obj.Objects}), len(lineblocks) + 2, nil
 }
 
-func parseFrontMatter(lines []LineBlock) (map[string]string, int, error){
+func parseFrontMatter(lines []LineBlock) (map[string]string, int, error) {
 	initial := false
 	ret := map[string]string{}
 	for i := 0; i < len(lines); i++ {
@@ -478,24 +481,22 @@ func parseFrontMatter(lines []LineBlock) (map[string]string, int, error){
 	return nil, 0, fmt.Errorf("Parse FrontMatter: no end")
 }
 
-
 // Root is root object
 type Root struct {
 	Objects
 	MetaData MetaData
 }
 
-
 // MetaData is meta data
 type MetaData struct {
-	Tags []string
-	Title *string
+	Tags      []string
+	Title     *string
 	Thumbnail *string
-	Date *time.Time
+	Date      *time.Time
 }
 
 // Parse parses lines
-func Parse(lines string) (*Root, error){
+func Parse(lines string) (*Root, error) {
 	t := LineBlockTokenizer{}
 	lineBlocks := []LineBlock{}
 	d := strings.Split(lines, "\n")
@@ -512,9 +513,8 @@ func Parse(lines string) (*Root, error){
 	return parseLineBlocks(lineBlocks)
 }
 
-
 // parseLineBlocks parses lines
-func parseLineBlocks(lines []LineBlock) (*Root, error){
+func parseLineBlocks(lines []LineBlock) (*Root, error) {
 	root := Root{}
 	tmp := Objects{}
 	fmt.Printf("%v\n", lines)
@@ -538,7 +538,7 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 				return nil, fmt.Errorf("Parse List: %v", err)
 			}
 			tmp = append(tmp, list)
-			i += lastConsumed 
+			i += lastConsumed
 		case LineBlockTypeOrderedListItem:
 			list, lastConsumed, err := parseOrderedListItems(lines[i:])
 			if err != nil {
@@ -547,10 +547,10 @@ func parseLineBlocks(lines []LineBlock) (*Root, error){
 			tmp = append(tmp, list)
 			i += lastConsumed + 1
 		case LineBlockTypeBlockQuote:
-			parseBlockQuote(lines[i:]);
+			parseBlockQuote(lines[i:])
 		case LineBlockTypePagination:
 			if i == 0 { // ParseFrontMatter
-				f, lastConsumed, err :=  parseFrontMatter(lines[i:])
+				f, lastConsumed, err := parseFrontMatter(lines[i:])
 				if err != nil {
 					return nil, fmt.Errorf("Parse FrontMatter: %v", err)
 				}

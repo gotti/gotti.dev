@@ -51,7 +51,7 @@ func TestReplaceInlineLink(t *testing.T) {
 			expected: "aieuo<a href=\"http://example.com\">link</a>aieuo",
 		},
 		{
-			input:   "aieuo[link](http://example.com)aieuo[link](http://example.com)aieuo",
+			input:    "aieuo[link](http://example.com)aieuo[link](http://example.com)aieuo",
 			expected: "aieuo<a href=\"http://example.com\">link</a>aieuo<a href=\"http://example.com\">link</a>aieuo",
 		},
 	}

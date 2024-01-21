@@ -20,25 +20,25 @@ var templates embed.FS
 
 // Config has the configuration for the framework
 type Config struct {
-	Layout Layout `json:"layout"`
-	BlogPath string `json:"blog_path"`
-	DefaultMetaData MetaData `json:"default_metadata"`
-	Menu []MenuItem `json:"menu"`
+	Layout          Layout     `json:"layout"`
+	BlogPath        string     `json:"blog_path"`
+	DefaultMetaData MetaData   `json:"default_metadata"`
+	Menu            []MenuItem `json:"menu"`
 }
 
 // MetaData has the configuration for the metadata
 type MetaData struct {
-	Title *string `json:"title"`
+	Title     *string `json:"title"`
 	TwitterID *string `json:"twitter_id"`
-	SiteName *string `json:"site_name"`
-	Image *string `json:"image"`
+	SiteName  *string `json:"site_name"`
+	Image     *string `json:"image"`
 }
 
 // WithDefault returns the default value for the metadata
 func (m *MetaData) WithDefault(title *string, image *string) *MetaData {
 	if title != nil {
 		tmp := *title
-		m.Title = &tmp 
+		m.Title = &tmp
 	}
 	if image != nil {
 		tmp := *image
@@ -71,7 +71,7 @@ func Parse(config []byte) (*Config, error) {
 // Generator has the templates, and generates the pages
 type Generator struct {
 	templates *template.Template
-	config *Config
+	config    *Config
 }
 
 // LoadTemplates loads the templates
@@ -103,7 +103,7 @@ func (g *Generator) Generate() (map[string]string, error) {
 	return data, nil
 }
 
-func (g *Generator) load() (map[string]*mdparser.Root ,error) {
+func (g *Generator) load() (map[string]*mdparser.Root, error) {
 	pages := make(map[string]*mdparser.Root)
 	filepath.WalkDir("pages", func(path string, d os.DirEntry, err error) error {
 		if err != nil {
@@ -148,9 +148,9 @@ type Posts struct {
 // Post has the post
 type Post struct {
 	Title string
-	Link string
-	Date time.Time
-	Tags []string
+	Link  string
+	Date  time.Time
+	Tags  []string
 }
 
 func (g *Generator) generateBlogIndex(pages map[string]*mdparser.Root) template.HTML {
@@ -182,9 +182,9 @@ func (g *Generator) generateBlogIndex(pages map[string]*mdparser.Root) template.
 		}
 		posts.Posts = append(posts.Posts, Post{
 			Title: title,
-			Link: "/"+k,
-			Date: date,
-			Tags: v.MetaData.Tags,
+			Link:  "/" + k,
+			Date:  date,
+			Tags:  v.MetaData.Tags,
 		})
 	}
 
@@ -194,7 +194,7 @@ func (g *Generator) generateBlogIndex(pages map[string]*mdparser.Root) template.
 
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "post_index", posts)
-	return withDiv("content", g.generateMenu() + template.HTML(buf.String()))
+	return withDiv("content", g.generateMenu()+template.HTML(buf.String()))
 
 }
 
@@ -216,7 +216,7 @@ func (g *Generator) generateTitle(title *string) template.HTML {
 func (g *Generator) generatePost(title *string, child template.HTML) template.HTML {
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "post", child)
-	return withDiv("content", g.generateTitle(title) + template.HTML(buf.String()))
+	return withDiv("content", g.generateTitle(title)+template.HTML(buf.String()))
 }
 
 func (g *Generator) generatePage() template.HTML {
@@ -228,7 +228,7 @@ func (g *Generator) generatePage() template.HTML {
 func (g *Generator) generateMenu() template.HTML {
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "menu", g.config.Menu)
-	return  withDiv("menu", template.HTML(buf.String()))
+	return withDiv("menu", template.HTML(buf.String()))
 }
 
 func withDiv(id string, s template.HTML) template.HTML {
