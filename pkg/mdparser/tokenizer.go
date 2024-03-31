@@ -26,8 +26,6 @@ const (
 	LineBlockTypeIndented = BlockType("LineBlockIndented")
 	// LineBlockTypeDivider is a divider
 	LineBlockTypeDivider = BlockType("LineBlockDivider")
-	// LineBlockTypeTags is a tag
-	LineBlockTypeTags = BlockType("LineBlockTags")
 	// LineBlockTypeSimple is a normal block
 	LineBlockTypeSimple = BlockType("LineBlockSimple")
 )
@@ -68,7 +66,6 @@ var matchers = []LineBlockMatcher{
 	LineBlockIndentedMatcher{},
 	LineBlockDividerMatcher{},
 	LineBlockPaginationMatcher{},
-	LineBlockTagsMatcher{},
 	LineBlockCodeStartOrEndMatcher{},
 	LineBlockSimpleMatcher{},
 }
@@ -180,31 +177,6 @@ func (l LineBlockIndentedMatcher) ParseOnce(line string) (LineBlock, error) {
 	if r.MatchString(line) {
 		f := r.FindString(line)
 		return &LineBlockIndented{Level: len(f), lineBlockImpl: lineBlockImpl{btype: LineBlockTypeIndented, tokenText: f, innerText: line[len(f):]}}, nil
-	}
-	return nil, fmt.Errorf("error parsing line: %v", line)
-}
-
-// LineBlockTags is a tag line, in Obsidian
-type LineBlockTags struct {
-	lineBlockImpl
-	Tags []string
-}
-
-// LineBlockTagsMatcher is a tag line, in Obsidian
-type LineBlockTagsMatcher struct {
-}
-
-// ParseOnce a line
-func (l LineBlockTagsMatcher) ParseOnce(line string) (LineBlock, error) {
-	r := regexp.MustCompile(`#([^\s]+)`)
-	if r.MatchString(line) {
-		f := r.FindAllStringSubmatch(line, -1)
-		tags := []string{}
-		for _, v := range f {
-			tags = append(tags, v[1])
-		}
-
-		return &LineBlockTags{Tags: tags, lineBlockImpl: lineBlockImpl{btype: LineBlockTypeTags, innerText: line}}, nil
 	}
 	return nil, fmt.Errorf("error parsing line: %v", line)
 }

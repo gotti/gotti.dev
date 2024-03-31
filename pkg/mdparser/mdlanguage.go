@@ -23,54 +23,41 @@ const (
 
 // Object is a type of object
 type Object interface {
-	String() string
 	ToHTML() string
 }
 
 // Container can contain objects
 type Container interface {
 	GetChildren() Objects
-	SetChildren(objs Objects)
 }
 
-// TextObject is a text object
-type TextObject interface {
-	GetText() string
-	SetText(text string)
+type EndObject interface {
+	GetContents() InlineBlocks
 }
 
-// TextObjectImpl is a text object implementation
-type TextObjectImpl struct {
-	text string
+type InlineContainerObjectImpl struct {
+	Contents InlineBlocks
+}
+
+// PlainObjectImpl is a text object implementation
+type PlainObjectImpl struct {
+	InlineContainerObjectImpl
 }
 
 // String returns the text
-func (t TextObjectImpl) String() string {
-	return t.text
+func (o PlainObjectImpl) String() string {
+	return string(o.InlineContainerObjectImpl.Contents.MDText)
 }
 
-// GetText returns the text
-func (t *TextObjectImpl) GetText() string {
-	return t.text
-}
-
-// SetText sets the text
-func (t *TextObjectImpl) SetText(text string) {
-	t.text = text
+func (o PlainObjectImpl) GetContents() InlineBlocks {
+	return o.InlineContainerObjectImpl.Contents
 }
 
 // Objects is a list of objects
 type Objects []Object
 
-func (o Objects) String() string {
-	var s string
-	s = "Objs["
-	for _, obj := range o {
-		s += "{" + obj.String() + "},"
-	}
-	s = strings.TrimRight(s, ",")
-	s += "]"
-	return s
+func (o Objects) GetChildren() Objects {
+	return o
 }
 
 // ToHTML returns the objects as HTML
@@ -80,16 +67,6 @@ func (o Objects) ToHTML() string {
 		s += obj.ToHTML()
 	}
 	return s
-}
-
-// GetChildren returns the inner children of the objects
-func (o Objects) GetChildren() Objects {
-	return o
-}
-
-// SetChildren sets the inner children of the objects
-func (o Objects) SetChildren(objs Objects) {
-	o = objs
 }
 
 // List is a list
@@ -133,16 +110,16 @@ func (l *OrderedList) ToHTML() string {
 // Heading is a heading object
 type Heading struct {
 	Level int
-	TextObjectImpl
+	PlainObjectImpl
 }
 
 func (h Heading) String() string {
-	return fmt.Sprintf("Heading{Level: %v, Text: %v}", h.Level, h.GetText())
+	return fmt.Sprintf("Heading{Level: %v, Text: %v}", h.Level, h.ToHTML())
 }
 
 // ToHTML returns the heading as HTML
 func (h Heading) ToHTML() string {
-	return fmt.Sprintf("<h%d>%v</h%d>", h.Level, h.GetText(), h.Level)
+	return fmt.Sprintf("<h%d>%v</h%d>", h.Level, h.PlainObjectImpl.InlineContainerObjectImpl.Contents.ToHTML(), h.Level)
 }
 
 // BlockQuote is a quotation object
@@ -166,17 +143,13 @@ func (b BlockQuote) ToHTML() string {
 
 // CodeBlock is a code block object
 type CodeBlock struct {
-	TextObjectImpl
+	PlainObjectImpl
 	FileName string
-}
-
-func (c CodeBlock) String() string {
-	return fmt.Sprintf("CodeBlock{Text: %v}", c.GetText())
 }
 
 // ToHTML returns the code block as HTML
 func (c CodeBlock) ToHTML() string {
-	return fmt.Sprintf("<pre>%s\n<code>%v</code></pre>", c.FileName, c.GetText())
+	return fmt.Sprintf("<pre>%s\n<code>%v</code></pre>", c.FileName, c.PlainObjectImpl.InlineContainerObjectImpl.Contents.ToHTML())
 }
 
 // Divider is a divider object
@@ -194,7 +167,7 @@ func (d Divider) ToHTML() string {
 	for _, i := range d.Objects {
 		s += i.ToHTML()
 	}
-	s += "</div>"
+	s += "</div>\n"
 	return s
 }
 
@@ -209,16 +182,12 @@ func (f FrontMatter) String() string {
 
 // Text is a text object
 type Text struct {
-	TextObjectImpl
-}
-
-func (t Text) String() string {
-	return fmt.Sprintf("TextObj{Text: %v}", t.GetText())
+	PlainObjectImpl
 }
 
 // ToHTML returns the text as HTML
 func (t Text) ToHTML() string {
-	return t.GetText()
+	return t.PlainObjectImpl.Contents.ToHTML()
 }
 
 func captureIndentedOrAbove(lines []LineBlock, indent int) []LineBlock {
@@ -236,51 +205,6 @@ func captureIndentedOrAbove(lines []LineBlock, indent int) []LineBlock {
 		}
 	}
 	return indented
-}
-
-func cleanUnnecessaryObjects(obj Object) Object {
-	o, ok := obj.(*Objects)
-	if ok {
-		if len(*o) == 1 {
-			return cleanUnnecessaryObjects((*o)[0])
-		}
-		for i, obj := range *o {
-			(*o)[i] = cleanUnnecessaryObjects(obj)
-		}
-		return o
-	}
-	c, ok := obj.(Container)
-	if ok {
-		inner := c.GetChildren()
-		for i, o := range inner {
-			inner[i] = cleanUnnecessaryObjects(o)
-		}
-		c.SetChildren(inner)
-	}
-	return obj
-}
-
-func replaceInline(obj Object) Object {
-	c, ok := obj.(Container)
-	if ok {
-		inner := c.GetChildren()
-		for i, o := range inner {
-			inner[i] = replaceInline(o)
-		}
-		c.SetChildren(inner)
-		return c.(Object)
-	}
-	t, ok := obj.(TextObject)
-	if ok {
-		t.SetText(ReplaceInline(t.GetText()))
-		return t.(Object)
-	}
-	_, ok = obj.(Divider)
-	if ok {
-		return obj
-	}
-	fmt.Printf("replaceInline: unknown type %T, value: %+v\n", obj, obj)
-	panic("replaceInline: unknown type")
 }
 
 func reTokenizeString(lines []string) ([]LineBlock, error) {
@@ -304,14 +228,36 @@ func reTokenize(lines []LineBlock) ([]LineBlock, error) {
 	return reTokenizeString(linesStr)
 }
 
-func parseListItems(lines []LineBlock) (Object, int, error) {
+type ParserAddon interface {
+	GetSingleParsers() []InlineSingleParser
+}
+
+// LineParser is a function to parse lines
+type LineParser struct {
+	inlineParser *InlineParser
+	addons       []ParserAddon
+}
+
+func NewLineParser(addon []ParserAddon) *LineParser {
+	singleParsers := []InlineSingleParser{}
+	for _, a := range addon {
+		if p := a.GetSingleParsers(); p != nil {
+			singleParsers = append(singleParsers, p...)
+		}
+	}
+	p := NewInlineParser(singleParsers)
+	return &LineParser{inlineParser: p, addons: addon}
+}
+
+func (p LineParser) parseListItems(lines []LineBlock) (Object, int, error) {
 	list := &List{}
 	lastConsumed := len(lines) - 1
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		fmt.Printf("Parse List Items: %v\n", l)
 		if l.Type() == LineBlockTypeListItem {
-			list.Objects = append(list.Objects, &Text{TextObjectImpl: TextObjectImpl{text: l.InnerText()}})
+			h := p.inlineParser.parse([]rune(l.InnerText()))
+			list.Objects = append(list.Objects, &Text{PlainObjectImpl: PlainObjectImpl{InlineContainerObjectImpl: InlineContainerObjectImpl{Contents: h}}})
 		} else if l.Type() == LineBlockTypeIndented {
 			captured := captureIndentedOrAbove(lines[i:], l.(*LineBlockIndented).Level)
 			reTokenized, err := reTokenize(captured)
@@ -319,7 +265,7 @@ func parseListItems(lines []LineBlock) (Object, int, error) {
 				return nil, 0, fmt.Errorf("Parse List Items: %v", err)
 			}
 			fmt.Println("retokenized, parsing")
-			parsed, err := parseLineBlocks(reTokenized)
+			parsed, err := p.parseLineBlocks(reTokenized)
 			if err != nil {
 				return nil, 0, fmt.Errorf("Parse List Items: %v", err)
 			}
@@ -335,17 +281,18 @@ func parseListItems(lines []LineBlock) (Object, int, error) {
 			break
 		}
 	}
-	return cleanUnnecessaryObjects(list), lastConsumed, nil
+	return list, lastConsumed, nil
 }
 
-func parseOrderedListItems(lines []LineBlock) (Object, int, error) {
+func (p LineParser) parseOrderedListItems(lines []LineBlock) (Object, int, error) {
 	list := &OrderedList{}
 	lastConsumed := len(lines) - 1
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
 		fmt.Printf("Parse List Items: %v\n", l)
 		if l.Type() == LineBlockTypeOrderedListItem {
-			list.Objects = append(list.Objects, &Text{TextObjectImpl: TextObjectImpl{text: l.InnerText()}})
+			h := p.inlineParser.parse([]rune(l.InnerText()))
+			list.Objects = append(list.Objects, &Text{PlainObjectImpl: PlainObjectImpl{InlineContainerObjectImpl: InlineContainerObjectImpl{Contents: h}}})
 		} else if l.Type() == LineBlockTypeIndented {
 			captured := captureIndentedOrAbove(lines[i:], l.(*LineBlockIndented).Level)
 			reTokenized, err := reTokenize(captured)
@@ -353,7 +300,7 @@ func parseOrderedListItems(lines []LineBlock) (Object, int, error) {
 				return nil, 0, fmt.Errorf("Parse List Items: %v", err)
 			}
 			fmt.Println("retokenized, parsing")
-			parsed, err := parseLineBlocks(reTokenized)
+			parsed, err := p.parseLineBlocks(reTokenized)
 			if err != nil {
 				return nil, 0, fmt.Errorf("Parse List Items: %v", err)
 			}
@@ -362,7 +309,6 @@ func parseOrderedListItems(lines []LineBlock) (Object, int, error) {
 			objs := &Objects{}
 			*objs = append(*objs, list.Objects[len(list.Objects)-1])
 			*objs = append(*objs, parsed.Objects...)
-			fmt.Println("@@@@objs", objs)
 			list.Objects[len(list.Objects)-1] = objs
 			i += len(captured) - 1
 		} else {
@@ -370,10 +316,10 @@ func parseOrderedListItems(lines []LineBlock) (Object, int, error) {
 			break
 		}
 	}
-	return cleanUnnecessaryObjects(list), lastConsumed, nil
+	return list, lastConsumed, nil
 }
 
-func parseBlockQuote(lines []LineBlock) (Object, int, error) {
+func (p LineParser) parseBlockQuote(lines []LineBlock) (Object, int, error) {
 	innerTexts := []string{}
 	consumed := 0
 	for i := 0; i < len(lines); i++ {
@@ -389,17 +335,16 @@ func parseBlockQuote(lines []LineBlock) (Object, int, error) {
 	if err != nil {
 		return nil, 0, fmt.Errorf("Parse BlockQuote: %v", err)
 	}
-	parsed, err := parseLineBlocks(reTokenized)
+	parsed, err := p.parseLineBlocks(reTokenized)
 	if err != nil {
 		return nil, 0, fmt.Errorf("Parse BlockQuote: %v", err)
 	}
 
 	objs := parsed
 
-	return cleanUnnecessaryObjects(
-		&BlockQuote{
-			Objects: objs.Objects,
-		}), consumed, err
+	return &BlockQuote{
+		Objects: objs.Objects,
+	}, consumed, err
 }
 
 func parseCodeBlock(lines []LineBlock) (Object, int, error) {
@@ -417,20 +362,28 @@ func parseCodeBlock(lines []LineBlock) (Object, int, error) {
 				fmt.Printf("Parse CodeBlock end: %v\n", lines[i-1])
 				return &CodeBlock{
 					FileName: filename,
-					TextObjectImpl: TextObjectImpl{
-						text: html.EscapeString(strings.Join(innerTexts, "\n")),
+					PlainObjectImpl: PlainObjectImpl{
+						InlineContainerObjectImpl: InlineContainerObjectImpl{
+							Contents: InlineBlocks{
+								Children: []InlineBlock{
+									InlineText{
+										Text: []rune(html.EscapeString(strings.Join(innerTexts, "\n"))),
+									},
+								},
+							},
+						},
 					},
 				}, i, nil
 			}
 		} else {
-      fmt.Printf("Parse CodeBlock: %v, inner: %v\n", l, l.TokenText() + l.InnerText())
+			fmt.Printf("Parse CodeBlock: %v, inner: %v\n", l, l.TokenText()+l.InnerText())
 			innerTexts = append(innerTexts, l.InnerText())
 		}
 	}
 	return nil, 0, fmt.Errorf("Parse CodeBlock: no end")
 }
 
-func parseDivider(lines []LineBlock) (Object, int, error) {
+func (p LineParser) parseDivider(lines []LineBlock) (Object, int, error) {
 	initial := false
 	lineblocks := []LineBlock{}
 	for i := 0; i < len(lines); i++ {
@@ -453,11 +406,11 @@ func parseDivider(lines []LineBlock) (Object, int, error) {
 		return nil, 0, nil
 	}
 	fmt.Println("lineblocks", lineblocks)
-	obj, err := parseLineBlocks(lineblocks)
+	obj, err := p.parseLineBlocks(lineblocks)
 	if err != nil {
 		return nil, 0, fmt.Errorf("Parse Divider: %v", err)
 	}
-	return cleanUnnecessaryObjects(&Divider{Objects: obj.Objects}), len(lineblocks) + 2, nil
+	return &Divider{Objects: obj.Objects}, len(lineblocks) + 2, nil
 }
 
 func parseFrontMatter(lines []LineBlock) (map[string]string, int, error) {
@@ -497,10 +450,11 @@ type MetaData struct {
 }
 
 // Parse parses lines
-func Parse(lines string) (*Root, error) {
+func (p LineParser) Parse(lines string) (*Root, error) {
 	t := LineBlockTokenizer{}
 	lineBlocks := []LineBlock{}
-	d := strings.Split(lines, "\n")
+	l := strings.ReplaceAll(lines, "\r\n", "\n")
+	d := strings.Split(l, "\n")
 	for _, li := range d {
 		l, err := t.Tokenize(li)
 		if err != nil {
@@ -511,11 +465,11 @@ func Parse(lines string) (*Root, error) {
 		}
 		lineBlocks = append(lineBlocks, l)
 	}
-	return parseLineBlocks(lineBlocks)
+	return p.parseLineBlocks(lineBlocks)
 }
 
 // parseLineBlocks parses lines
-func parseLineBlocks(lines []LineBlock) (*Root, error) {
+func (p LineParser) parseLineBlocks(lines []LineBlock) (*Root, error) {
 	root := Root{}
 	tmp := Objects{}
 	fmt.Printf("%v\n", lines)
@@ -526,29 +480,37 @@ func parseLineBlocks(lines []LineBlock) (*Root, error) {
 		case LineBlockTypeHeading:
 			tmp = append(tmp, &Heading{
 				Level: l.(*LineBlockHeading).Level,
-				TextObjectImpl: TextObjectImpl{
-					text: l.InnerText(),
+				PlainObjectImpl: PlainObjectImpl{
+					InlineContainerObjectImpl: InlineContainerObjectImpl{
+						Contents: InlineBlocks{
+							Children: []InlineBlock{
+								InlineText{
+									Text: []rune(html.EscapeString(l.InnerText())),
+								},
+							},
+						},
+					},
 				},
 			})
 			root.Objects = append(root.Objects, tmp)
 			//fmt.Printf("Parse: %v\n", root.Objects)
 			tmp = Objects{}
 		case LineBlockTypeListItem:
-			list, lastConsumed, err := parseListItems(lines[i:])
+			list, lastConsumed, err := p.parseListItems(lines[i:])
 			if err != nil {
 				return nil, fmt.Errorf("Parse List: %v", err)
 			}
 			tmp = append(tmp, list)
 			i += lastConsumed
 		case LineBlockTypeOrderedListItem:
-			list, lastConsumed, err := parseOrderedListItems(lines[i:])
+			list, lastConsumed, err := p.parseOrderedListItems(lines[i:])
 			if err != nil {
 				return nil, fmt.Errorf("Parse List: %v", err)
 			}
 			tmp = append(tmp, list)
 			i += lastConsumed + 1
 		case LineBlockTypeBlockQuote:
-			parseBlockQuote(lines[i:])
+			p.parseBlockQuote(lines[i:])
 		case LineBlockTypePagination:
 			if i == 0 { // ParseFrontMatter
 				f, lastConsumed, err := parseFrontMatter(lines[i:])
@@ -592,18 +554,30 @@ func parseLineBlocks(lines []LineBlock) (*Root, error) {
 				root.Objects = append(root.Objects, &Divider{Objects: tmp})
 				tmp = Objects{}
 			}
-		case LineBlockTypeTags:
 		case LineBlockTypeIndented:
 			fallthrough
 		case LineBlockTypeSimple:
 			fallthrough
 		default:
-			tmp = append(tmp, &Text{TextObjectImpl: TextObjectImpl{text: l.InnerText()}})
+			if len(tmp) > 1 {
+				if _, ok := tmp[len(tmp)-1].(*Text); ok {
+					obs := p.inlineParser.parse([]rune(l.InnerText()))
+					tmp[len(tmp)-1].(*Text).PlainObjectImpl.InlineContainerObjectImpl.Contents.Children = append(tmp[len(tmp)-1].(*Text).PlainObjectImpl.InlineContainerObjectImpl.Contents.Children, obs.Children...)
+				}
+			} else {
+				obs := p.inlineParser.parse([]rune(l.InnerText()))
+				tmp = append(tmp, &Text{PlainObjectImpl: PlainObjectImpl{
+					InlineContainerObjectImpl: InlineContainerObjectImpl{
+						Contents: InlineBlocks{
+							Children: obs.Children,
+						},
+					},
+				}})
+			}
 		}
 	}
 	if len(tmp) > 0 {
-		root.Objects = append(root.Objects, cleanUnnecessaryObjects(&tmp))
+		root.Objects = append(root.Objects, &tmp)
 	}
-	root.Objects = replaceInline(root.Objects).(Objects)
 	return &root, nil
 }

@@ -43,17 +43,17 @@ tags: ["Liunx", "Infra", "k8s"]
 Kubernetesを使えばこれを達成できます。OpenShiftなどを使うとより簡単にデプロイできると思いますが、趣味は逆張りしてなんぼなので全部自分で管理することにしました。Kubernetesに導入するコンポーネントは以下のようになりました。
 
 - TopoLVM
-ホストからLVMを切り出してPVを作る、rookの他高速なローカルストレージのために導入
+  - ホストからLVMを切り出してPVを作る、rookの他高速なローカルストレージのために導入
 - Rook
-topolvmを束ねて分散ストレージであるceph
+  - topolvmを束ねて分散ストレージであるceph
 - KubeVirt && CDI && Cluster Network Addon Operator
-VMを管理してPVCをVMのディスクとしてアタッチ、ホストのOpen vSwitchをVMにアタッチ
+  - VMを管理してPVCをVMのディスクとしてアタッチ、ホストのOpen vSwitchをVMにアタッチ
 - FluxCD
-Continuous Delivery
+  - Continuous Delivery
 - MetalLB
-BGPでグローバルIPとプライベートIPを広報、LoadBalancerのannotationで切り替えられる。
+  - BGPでグローバルIPとプライベートIPを広報、LoadBalancerのannotationで切り替えられる。
 - Traefik
-Webで何かしら公開するコンテナのために
+  - Webで何かしら公開するコンテナのために
 
 # 構成
 

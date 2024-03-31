@@ -15,7 +15,7 @@ func TestList(t *testing.T) {
 - item2`,
 			expected: Objects{
 				&List{
-					Objects: Objects{&Text{TextObjectImpl: TextObjectImpl{"item1"}}, &Text{TextObjectImpl: TextObjectImpl{"item2"}}},
+					Objects: Objects{&Text{PlainObjectImpl: PlainObjectImpl{"item1"}}, &Text{PlainObjectImpl: PlainObjectImpl{"item2"}}},
 				},
 			},
 		},
@@ -27,12 +27,12 @@ func TestList(t *testing.T) {
 				&List{
 					Objects: Objects{
 						Objects{
-							&Text{TextObjectImpl: TextObjectImpl{"item1"}},
+							&Text{PlainObjectImpl: PlainObjectImpl{"item1"}},
 							&List{
-								Objects: Objects{&Text{TextObjectImpl: TextObjectImpl{"hogehoge"}}},
+								Objects: Objects{&Text{PlainObjectImpl: PlainObjectImpl{"hogehoge"}}},
 							},
 						},
-						&Text{TextObjectImpl: TextObjectImpl{"item2"}},
+						&Text{PlainObjectImpl: PlainObjectImpl{"item2"}},
 					},
 				},
 			},
@@ -46,15 +46,15 @@ func TestList(t *testing.T) {
 				&List{
 					Objects: Objects{
 						&Objects{
-							&Text{TextObjectImpl: TextObjectImpl{"item1"}},
+							&Text{PlainObjectImpl: PlainObjectImpl{"item1"}},
 							&List{
 								Objects: Objects{
-									&Text{TextObjectImpl: TextObjectImpl{"hogehoge"}},
-									&Text{TextObjectImpl: TextObjectImpl{"hogehuga"}},
+									&Text{PlainObjectImpl: PlainObjectImpl{"hogehoge"}},
+									&Text{PlainObjectImpl: PlainObjectImpl{"hogehuga"}},
 								},
 							},
 						},
-						&Text{TextObjectImpl: TextObjectImpl{"item2"}},
+						&Text{PlainObjectImpl: PlainObjectImpl{"item2"}},
 					},
 				},
 			},
@@ -67,16 +67,16 @@ func TestList(t *testing.T) {
 			expected: Objects{
 				&List{
 					Objects: []Object{&Objects{
-						&Text{TextObjectImpl: TextObjectImpl{"item1"}},
+						&Text{PlainObjectImpl: PlainObjectImpl{"item1"}},
 						&List{
 							Objects: Objects{&Objects{
-								&Text{TextObjectImpl: TextObjectImpl{"hogehoge"}},
+								&Text{PlainObjectImpl: PlainObjectImpl{"hogehoge"}},
 								&List{
-									Objects: []Object{&Text{TextObjectImpl: TextObjectImpl{"hogehuga"}}},
+									Objects: []Object{&Text{PlainObjectImpl: PlainObjectImpl{"hogehuga"}}},
 								},
 							}}},
 					},
-						&Text{TextObjectImpl: TextObjectImpl{"item2"}}},
+						&Text{PlainObjectImpl: PlainObjectImpl{"item2"}}},
 				},
 			},
 		},
@@ -89,15 +89,15 @@ func TestList(t *testing.T) {
 				&List{
 					Objects: []Object{
 						&Objects{
-							&Text{TextObjectImpl: TextObjectImpl{"item1"}},
+							&Text{PlainObjectImpl: PlainObjectImpl{"item1"}},
 							&OrderedList{
 								Objects: Objects{
-									&Text{TextObjectImpl: TextObjectImpl{"hogehoge"}},
-									&Text{TextObjectImpl: TextObjectImpl{"hogehuga"}},
+									&Text{PlainObjectImpl: PlainObjectImpl{"hogehoge"}},
+									&Text{PlainObjectImpl: PlainObjectImpl{"hogehuga"}},
 								},
 							},
 						},
-						&Text{TextObjectImpl: TextObjectImpl{"item2"}}},
+						&Text{PlainObjectImpl: PlainObjectImpl{"item2"}}},
 				},
 			},
 		},

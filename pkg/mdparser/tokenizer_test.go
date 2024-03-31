@@ -31,29 +31,6 @@ func TestParseList(t *testing.T) {
 	}
 }
 
-func TestParseTags(t *testing.T) {
-	l := LineBlockTokenizer{}
-	data := []struct {
-		inputLine string
-		expected  LineBlock
-	}{
-		{"#hoge #huga", &LineBlockTags{lineBlockImpl: lineBlockImpl{btype: LineBlockTypeTags, tokenText: "hoge huga"}}},
-	}
-	for _, d := range data {
-		actual, err := l.Tokenize(d.inputLine)
-		if err != nil {
-			t.Errorf("Error: %v", err)
-		}
-		if actual.Type() != d.expected.Type() {
-			t.Errorf("Type: expected %v, but got %v", d.expected.Type(), actual.Type())
-		}
-		if actual.TokenText() != d.expected.TokenText() {
-			t.Errorf("TokenText: expected %v, but got %v", d.expected.TokenText(), actual.TokenText())
-		}
-	}
-
-}
-
 func TestParseHeading(t *testing.T) {
 	l := LineBlockTokenizer{}
 	data := []struct {

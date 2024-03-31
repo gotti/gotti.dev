@@ -14,12 +14,16 @@
       "link": "/"
     },
     {
-      "name": "About",
-      "link": "/about/"
+      "name": "History",
+      "link": "/history/"
     },
     {
       "name": "Blog",
       "link": "/post/"
+    },
+    {
+      "name": "Links",
+      "link": "/link/"
     }
   ] 
 }

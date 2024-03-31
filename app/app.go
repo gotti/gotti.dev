@@ -4,10 +4,20 @@ import (
 	"net/http"
 
 	"github.com/gotti/gomd-blog/pkg/framework"
+	"github.com/gotti/gomd-blog/pkg/generator"
 )
 
 func main() {
-	g, err := framework.LoadTemplates()
+	bi, err := generator.NewBlogGenerator("./config.json")
+	if err != nil {
+		panic(err)
+	}
+	g, err := framework.NewGenerator([]framework.IndexingAddon{
+		bi.NewBlogIndexGenerator(),
+	}, nil, []framework.TemplateAddon{
+		bi.NewBlogTemplateAddon(),
+		bi.NewPageTemplateAddon(),
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -32,7 +42,7 @@ func main() {
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.WriteHeader(http.StatusMethodNotAllowed)
-			w.Write([]byte("Method not allowed, use post"))
+			w.Write([]byte("Method not allowed"))
 			return
 		}
 	})
