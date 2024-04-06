@@ -65,7 +65,7 @@ $ ssh root@glacier -i /etc/btrbk/ssh/id_glacier_btrbk
 $ sudo cp /etc/btrbk/btrbk.conf.example /etc/btrbk/btrbk.conf
 ```
 
-`/etc/btrbk/btrbk.conf`を編集します。`#`のコメントアウトは残ってると動かないかもしれないです。バックアップの必要数と容量とかと相談して決めてください。
+`/etc/btrbk/btrbk.conf`を編集します。コメントアウトは残ってると動かないかもしれないです。バックアップの必要数と容量とかと相談して決めてください。
 
 ```
 transaction_log /var/log/btrbk.log
