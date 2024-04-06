@@ -96,3 +96,38 @@ volume /mnt/
     snapshot_dir btrbk_snapshots
     # バックアップ元でスナップショットを保存するディレクトリを指定
 ```
+
+## btrbkの定期実行
+
+ArchLinuxでは、`/usr/lib/systemd/system/btrbk.service`と`/usr/lib/systemd/system/btrbk.timer`が用意されています。が、このタイマーはdailyですが、hourlyで実行したいのでコピペして新しくタイマーを作成します。`/etc/systemd/system/btrbk-hourly.timer`と`service`を作ります
+
+```systemd:/etc/systemd/system/btrbk-hourly.timer
+[Unit]
+Description=btrbk hourly backup
+
+[Timer]
+OnCalendar=hourly
+AccuracySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+```systemd:/etc/systemd/system/btrbk-hourly.service
+[Unit]
+Description=btrbk backup
+Documentation=man:btrbk(1)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/btrbk run
+```
+
+有効化します。
+```
+sudo systemctl daemon-reload
+sudo systemctl enable --now btrbk-hourly.timer
+```
+
+1時間おきにバックアップが取られてたら成功です。
