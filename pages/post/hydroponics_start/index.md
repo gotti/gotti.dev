@@ -28,7 +28,7 @@ thumbnail: "https://gotti.dev/post/hydroponics_start/yousu.webp"
 ### ブクブク
 
 ホームセンターで買った。
-エアストーンが沈み切らないので困っている。
+エアストーンの音が反響してうるさいので困っている。
 
 ### センサー
 
@@ -41,5 +41,5 @@ Mijiaは簡単にファームウェアを書き換えてBLEで温湿度を広報
 
 ![ESP32](./esp32.webp)
 
-これらは自宅サーバのPrometheusでデータを収集してGrafanaで可視化している。
+これらで、温室の温湿度・水温・照度を計測、自宅サーバのPrometheusでデータを収集してGrafanaで可視化している。
 Publicにしているので誰でも見ることができる。[https://grafana.gotti.dev/public-dashboards/b2f3dd57cf9b4a9485c0bea537a3f23d](https://grafana.gotti.dev/public-dashboards/b2f3dd57cf9b4a9485c0bea537a3f23d)
