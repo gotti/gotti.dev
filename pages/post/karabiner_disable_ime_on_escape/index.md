@@ -1,5 +1,5 @@
 ---
-title: "Karabiner-ElementsとAquaSKKとVimで日本語入力を快適にする"
+title: "Karabiner-Elementsで、Vimのノーマルモードに戻ると同時にIMEをオフにする"
 date: "2025-04-07"
 tags: ["MacOS", "Vim", ""Karabiner-Elements", "AquaSKK", "SKK"]
 ---
