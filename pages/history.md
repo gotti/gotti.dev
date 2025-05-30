@@ -19,7 +19,8 @@ date: "2024-03-31"
 
 - SecHack365 2020
 - UEC Bug Bounty 2020 優秀賞&特別賞
-- Securitry Camp 2021
+- Securitry Camp 2021 Zトラック
+- 技育展 2022 優秀賞
 - ICTトラブルシューティングコンテスト2022 3位
     - 参加記: https://gotti.dev/post/ictsc2022/index.html
 - UEC Bug Bounty 2023 優秀賞&特別賞

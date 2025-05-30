@@ -10,5 +10,5 @@
 
 - [りんりん](https://lnln.dev)
 - [アイスの棒](https://azukibar.dev)
-- [捻れたパピルス](https://www.hutinoatari.dev/link)
+- [捻れたパピルス](https://www.hutinoatari.dev/)
 - [つまみネット](https://trpfrog.net/)

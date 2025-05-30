@@ -27,10 +27,10 @@ func main() {
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path[1:]
+		// if path ended with /, add index.html
 		if path == "" || path[len(path)-1] == '/' {
 			path += "index.html"
 		}
-		// if path ended with /, add index.html
 		d, ok := data[path]
 		if !ok {
 			h := http.FileServer(http.Dir("./pages"))
