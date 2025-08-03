@@ -44,27 +44,23 @@ func NewGenerator(iadd []IndexingAddon, radd []ReplaceAddon, tadd []TemplateAddo
 }
 
 // Generate generates the pages
-func (g *Generator) Generate() (map[string]string, error) {
+func (g *Generator) Generate(pages *Pages) (map[string]string, error) {
 	ret := make(map[string]string)
-	pages, err := Load()
-	if err != nil {
-		return nil, fmt.Errorf("error loading pages: %w", err)
-	}
 	for _, i := range g.indexingAddon {
-		npages, err := i.GenerateIndexes(&pages)
+		npages, err := i.GenerateIndexes(pages)
 		if err != nil {
 			return nil, fmt.Errorf("error generating indexes: %w", err)
 		}
-		pages = *npages
+		pages = npages
 	}
 	for _, r := range g.replaceAddon {
-		npages, err := r.ReplacePages(&pages)
+		npages, err := r.ReplacePages(pages)
 		if err != nil {
 			return nil, fmt.Errorf("error replacing pages: %w", err)
 		}
-		pages = *npages
+		pages = npages
 	}
-	for _, p := range pages {
+	for _, p := range *pages {
 		html := p.Contents.ToHTML()
 		for _, t := range g.templateAddon {
 			npage, err := t.GeneratePage(p, template.HTML(html))
@@ -99,7 +95,7 @@ type Page struct {
 	Path     string
 }
 
-func Load() (Pages, error) {
+func LoadLocalPages() (Pages, error) {
 	parser := mdparser.NewLineParser(nil)
 	pages := NewPages()
 	filepath.WalkDir("pages", func(path string, d os.DirEntry, err error) error {
@@ -138,7 +134,6 @@ func Load() (Pages, error) {
 
 		//get filename
 		filename := filepath.Base(path)
-
 
 		_, ok := pages[path]
 		if ok {

@@ -21,7 +21,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	data, err := g.Generate()
+	pages, err := framework.LoadLocalPages()
+	if err != nil {
+		panic(err)
+	}
+	data, err := g.Generate(&pages)
 	if err != nil {
 		panic(err)
 	}
@@ -38,13 +42,6 @@ func main() {
 			return
 		}
 		w.Write([]byte(d))
-	})
-	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			w.Write([]byte("Method not allowed"))
-			return
-		}
 	})
 	http.ListenAndServe(":8080", nil)
 }

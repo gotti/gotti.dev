@@ -27,7 +27,12 @@ func main() {
 		panic(err)
 	}
 	// data is a map of path to content
-	data, err := g.Generate()
+
+	pages, err := framework.LoadLocalPages()
+	if err != nil {
+		panic(err)
+	}
+	data, err := g.Generate(&pages)
 	if err != nil {
 		panic(err)
 	}
