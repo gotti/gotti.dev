@@ -50,9 +50,12 @@ func (g *generator) generatePage() template.HTML {
 	return withDiv("content", template.HTML(buf.String()))
 }
 
-func (g *generator) generateMenu() template.HTML {
+func (g *generator) generateMenu(page *framework.Page) template.HTML {
 	buf := new(bytes.Buffer)
 	g.templates.ExecuteTemplate(buf, "menu", g.config.Menu)
+	if page != nil {
+		g.templates.ExecuteTemplate(buf, "request_changes", fmt.Sprintf("https://github.com/gotti/gotti.dev/blob/main/%s", page.OriginalPath))
+	}
 	return withDiv("menu", template.HTML(buf.String()))
 }
 
@@ -71,7 +74,7 @@ func (g *generator) generateLayout(md *mdparser.Root) template.HTML {
 		Body template.HTML
 	}{
 		Head: g.generateHeader(g.config.DefaultMetaData.WithDefault(title, md.MetaData.Thumbnail)),
-		Body: g.generateMenu() + g.generatePost(md.MetaData.Title, template.HTML(md.Objects.ToHTML())),
+		Body: g.generateMenu(nil) + g.generatePost(md.MetaData.Title, template.HTML(md.Objects.ToHTML())),
 	})
 	return template.HTML(buf.String())
 }
@@ -87,7 +90,7 @@ func (t *postTemplateAddon) GeneratePage(page *framework.Page, pagehtml template
 		Body template.HTML
 	}{
 		Head: t.generateHeader(t.config.DefaultMetaData.WithDefault(meta.Title, meta.Thumbnail)),
-		Body: t.generateMenu() + t.generatePost(meta.Title, template.HTML(pagehtml)),
+		Body: t.generateMenu(page) + t.generatePost(meta.Title, template.HTML(pagehtml)),
 	})
 	return template.HTML(buf.String()), nil
 }
