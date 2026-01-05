@@ -90,37 +90,38 @@ func (p *Pages) AddPage(path string, page *Page) {
 }
 
 type Page struct {
-	Contents *mdparser.Root
-	Filename string
-	Path     string
+	Contents     *mdparser.Root
+	Filename     string
+	Path         string
+	OriginalPath string
 }
 
 func LoadLocalPages() (Pages, error) {
 	parser := mdparser.NewLineParser(nil)
 	pages := NewPages()
-	filepath.WalkDir("pages", func(path string, d os.DirEntry, err error) error {
+	filepath.WalkDir("pages", func(origPath string, d os.DirEntry, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking directory: %w", err)
 		}
 		if d.IsDir() {
 			return err
 		}
-		if filepath.Ext(path) != ".md" {
+		if filepath.Ext(origPath) != ".md" {
 			return nil
 		}
-		lines, err := os.ReadFile(path)
+		lines, err := os.ReadFile(origPath)
 		if err != nil {
-			fmt.Printf("error reading file, file=%v; %v\n", path, err)
+			fmt.Printf("error reading file, file=%v; %v\n", origPath, err)
 			return nil
 		}
 		md, err := parser.Parse(string(lines))
 		if err != nil {
-			fmt.Printf("error parsing markdown, file=%v: %v\n", path, err)
+			fmt.Printf("error parsing markdown, file=%v: %v\n", origPath, err)
 			return nil
 		}
 
 		//remove pages/ from path
-		path = path[len("pages/"):]
+		path := origPath[len("pages/"):]
 
 		//remove the extension from the path
 		path = path[:len(path)-len(filepath.Ext(path))]
@@ -141,9 +142,10 @@ func LoadLocalPages() (Pages, error) {
 		}
 
 		p := &Page{
-			Contents: md,
-			Filename: filename,
-			Path:     path,
+			Contents:     md,
+			Filename:     filename,
+			Path:         path,
+			OriginalPath: origPath,
 		}
 		pages.AddPage(path, p)
 
