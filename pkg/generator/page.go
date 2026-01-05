@@ -23,7 +23,7 @@ func (t *standalonePageAddon) GeneratePage(page *framework.Page, pagehtml templa
 		Body template.HTML
 	}{
 		Head: t.generateHeader(t.config.DefaultMetaData.WithDefault(meta.Title, meta.Thumbnail)),
-		Body: t.generateMenu() + t.generatePost(meta.Title, template.HTML(pagehtml)),
+		Body: t.generateMenu(page) + t.generatePost(meta.Title, template.HTML(pagehtml)),
 	})
 	return template.HTML(buf.String()), nil
 }

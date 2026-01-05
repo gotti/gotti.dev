@@ -1,11 +1,11 @@
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 COPY . /app
 
 RUN go run ./cmd/static-generate/main.go -output ./static
 
-FROM nginx:1.27.5
+FROM nginx:1.29.4
 
 # copy md and images
 COPY --from=builder /app/pages /usr/share/nginx/html
