@@ -10,6 +10,9 @@ FROM nginx:1.29.5
 # copy md and images
 COPY --from=builder /app/pages /usr/share/nginx/html
 
+# copy nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # merge generated html
 COPY --from=builder /app/static /usr/share/nginx/html
 
