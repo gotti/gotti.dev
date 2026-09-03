@@ -5,7 +5,7 @@ COPY . /app
 
 RUN go run ./cmd/static-generate/main.go -output ./static
 
-FROM nginx:1.30.0
+FROM nginx:1.31.5
 
 # copy md and images
 COPY --from=builder /app/pages /usr/share/nginx/html
